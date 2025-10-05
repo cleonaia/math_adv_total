@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notificacions Push Web - Math Advantage</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link href="../../portal/assets/css/dashboard.css" rel="stylesheet">
+    
+    <style>
+        .push-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+            margin-bottom: 2rem;
+        }
+        
+        .notification-item {
+            background: white;
+            border-radius: 10px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-left: 4px solid #667eea;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            transition: transform 0.2s ease;
+        }
+        
+        .notification-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+        }
+        
+        .notification-item.unread {
+            border-left-color: #f59e0b;
+            background: #fffbeb;
+        }
+        
+        .notification-item.urgent {
+            border-left-color: #ef4444;
+            background: #fef2f2;
+        }
+        
+        .push-controls {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+        
+        .permission-status {
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+        
+        .permission-granted {
+            background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
+            color: white;
+        }
+        
+        .permission-denied {
+            background: linear-gradient(135deg, #ef4444 0%, #f87171 100%);
+            color: white;
+        }
+        
+        .permission-default {
+            background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
+            color: white;
+        }
+        
+        .stats-card {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 1rem;
+        }
+        
+        .stats-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        .test-notification {
+            background: linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%);
+            border: none;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 10px;
+            font-weight: bold;
+        }
+        
+        .test-notification:hover {
+            background: linear-gradient(135deg, #7c3aed 0%, #8b5cf6 100%);
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        .notification-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+        
+        .action-btn {
+            background: #667eea;
+            border: none;
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 5px;
+            font-size: 0.8rem;
+        }
+        
+        .action-btn:hover {
+            background: #5a67d8;
+            color: white;
+        }
+        
+        .nav-pills .nav-link.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        @media (max-width: 768px) {
+            .push-card,
+            .push-controls {
+                margin-left: -1rem;
+                margin-right: -1rem;
+                border-radius: 0;
+            }
+        }
+    </style>
+</head>
+<body class="bg-light">
+    <div class="container-fluid">
+        <!-- Header -->
+        <div class="push-card">
+            <div class="card-body text-center">
+                <h1 class="card-title mb-2">
+                    <i class="fas fa-bell me-3"></i>Notificacions Push Web
+                </h1>
+                <p class="card-text opacity-75 mb-0">
+                    Sistema de notificacions en temps real per mantenir-te sempre informat
+                </p>
+            </div>
+        </div>
+        
+        <!-- Permission Status -->
+        <div id="permissionStatus" class="permission-status permission-default">
+            <i class="fas fa-bell-slash me-2"></i>
+            <span>Comprova els permisos de notificacions...</span>
+        </div>
+        
+        <!-- Navigation Tabs -->
+        <ul class="nav nav-pills mb-4" id="pushTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="notifications-tab" data-bs-toggle="pill" data-bs-target="#notifications" type="button">
+                    <i class="fas fa-inbox me-2"></i>Les Meves Notificacions
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="send-tab" data-bs-toggle="pill" data-bs-target="#send" type="button">
+                    <i class="fas fa-paper-plane me-2"></i>Enviar Notificació
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="stats-tab" data-bs-toggle="pill" data-bs-target="#stats" type="button">
+                    <i class="fas fa-chart-bar me-2"></i>Estadístiques
+                </button>
+            </li>
+        </ul>
+        
+        <!-- Tab Content -->
+        <div class="tab-content" id="pushTabsContent">
+            
+            <!-- Notifications Tab -->
+            <div class="tab-pane fade show active" id="notifications" role="tabpanel">
+                <div class="row">
+                    <div class="col-lg-8">
+                        <div class="push-controls">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h5><i class="fas fa-bell me-2"></i>Notificacions Recents</h5>
+                                <div>
+                                    <button class="btn btn-outline-primary btn-sm me-2" onclick="marcarTodasLeidas()">
+                                        <i class="fas fa-check-double"></i> Marcar Totes Llegides
+                                    </button>
+                                    <button class="btn btn-outline-secondary btn-sm" onclick="cargarNotificaciones()">
+                                        <i class="fas fa-sync-alt"></i> Actualitzar
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div id="notificationsList">
+                                <!-- Las notificaciones se cargarán aquí dinámicamente -->
+                                <div class="text-center py-4">
+                                    <i class="fas fa-spinner fa-spin fa-2x text-muted"></i>
+                                    <p class="text-muted mt-2">Carregant notificacions...</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-4">
+                        <div class="push-controls">
+                            <h6><i class="fas fa-cog me-2"></i>Controls de Notificacions</h6>
+                            
+                            <div class="d-grid gap-2">
+                                <button class="btn btn-success" onclick="habilitarNotificaciones()" id="enableBtn">
+                                    <i class="fas fa-bell me-2"></i>Habilitar Notificacions
+                                </button>
+                                
+                                <button class="btn test-notification" onclick="enviarNotificacionPrueba()">
+                                    <i class="fas fa-vial me-2"></i>Notificació de Prova
+                                </button>
+                                
+                                <button class="btn btn-warning" onclick="deshabilitarNotificaciones()" id="disableBtn" style="display: none;">
+                                    <i class="fas fa-bell-slash me-2"></i>Deshabilitar
+                                </button>
+                            </div>
+                            
+                            <hr>
+                            
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="soundEnabled" checked>
+                                <label class="form-check-label" for="soundEnabled">
+                                    So de notificacions
+                                </label>
+                            </div>
+                            
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="badgeEnabled" checked>
+                                <label class="form-check-label" for="badgeEnabled">
+                                    Badge al navegador
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Send Notification Tab -->
+            <div class="tab-pane fade" id="send" role="tabpanel">
+                <div class="push-controls">
+                    <h5><i class="fas fa-paper-plane me-2"></i>Enviar Nova Notificació</h5>
+                    
+                    <form id="sendNotificationForm" onsubmit="enviarNotificacion(event)">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="notifTitle" class="form-label">Títol</label>
+                                    <input type="text" class="form-control" id="notifTitle" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="notifType" class="form-label">Tipus</label>
+                                    <select class="form-select" id="notifType">
+                                        <option value="general">General</option>
+                                        <option value="academica">Acadèmica</option>
+                                        <option value="administrativa">Administrativa</option>
+                                        <option value="social">Social</option>
+                                        <option value="sistema">Sistema</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="notifMessage" class="form-label">Missatge</label>
+                            <textarea class="form-control" id="notifMessage" rows="3" required></textarea>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="notifPriority" class="form-label">Prioritat</label>
+                                    <select class="form-select" id="notifPriority">
+                                        <option value="baja">Baixa</option>
+                                        <option value="normal" selected>Normal</option>
+                                        <option value="alta">Alta</option>
+                                        <option value="urgente">Urgent</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="notifTargetType" class="form-label">Destinataris</label>
+                                    <select class="form-select" id="notifTargetType">
+                                        <option value="todos">Tots els usuaris</option>
+                                        <option value="student">Només estudiants</option>
+                                        <option value="teacher">Només professors</option>
+                                        <option value="parent">Només pares</option>
+                                        <option value="admin">Només administradors</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="notifUrl" class="form-label">URL de destí (opcional)</label>
+                            <input type="url" class="form-control" id="notifUrl" placeholder="/portal/welcome.php">
+                        </div>
+                        
+                        <div class="d-grid">
+                            <button type="submit" class="btn test-notification">
+                                <i class="fas fa-paper-plane me-2"></i>Enviar Notificació
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <!-- Statistics Tab -->
+            <div class="tab-pane fade" id="stats" role="tabpanel">
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="stats-card">
+                            <div class="stats-number" id="totalNotifications">0</div>
+                            <div class="text-muted">Total Notificacions</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="stats-card">
+                            <div class="stats-number text-success" id="deliveredNotifications">0</div>
+                            <div class="text-muted">Entregades</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="stats-card">
+                            <div class="stats-number text-info" id="readNotifications">0</div>
+                            <div class="text-muted">Llegides</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="stats-card">
+                            <div class="stats-number text-warning" id="activeSubscriptions">0</div>
+                            <div class="text-muted">Suscripcions Actives</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="push-controls mt-4">
+                    <h5><i class="fas fa-chart-line me-2"></i>Gràfic de Rendiment</h5>
+                    <canvas id="notificationChart" height="100"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <script>
+        // Variables globales
+        let notificationPermission = 'default';
+        let swRegistration = null;
+        let pushSubscription = null;
+        
+        // VAPID public key (mismo que en el backend)
+        const vapidPublicKey = 'BEl62iUYgUivxIkv69yViEuiBIa40HcCWLWU6Q4ZFRgJFWxmQ47dFK5xUE6KrSlNQ6E0PqGCh3_J0b8xAH4-SSo';
+        
+        // Inicializar cuando se carga la página
+        document.addEventListener('DOMContentLoaded', function() {
+            initializePushNotifications();
+            cargarNotificaciones();
+            cargarEstadisticas();
+        });
+        
+        /**
+         * Inicializar sistema de push notifications
+         */
+        async function initializePushNotifications() {
+            // Verificar soporte del navegador
+            if (!('serviceWorker' in navigator) || !('PushManager' in window)) {
+                mostrarEstadoPermiso('not-supported', 'El teu navegador no suporta notificacions push');
+                return;
+            }
+            
+            // Registrar Service Worker
+            try {
+                swRegistration = await navigator.serviceWorker.register('/sw.js');
+                console.log('Service Worker registrat:', swRegistration);
+            } catch (error) {
+                console.error('Error registrant Service Worker:', error);
+            }
+            
+            // Verificar permisos actuales
+            notificationPermission = Notification.permission;
+            actualizarEstadoPermiso();
+        }
+        
+        /**
+         * Actualizar estado de permisos en la UI
+         */
+        function actualizarEstadoPermiso() {
+            const statusEl = document.getElementById('permissionStatus');
+            const enableBtn = document.getElementById('enableBtn');
+            const disableBtn = document.getElementById('disableBtn');
+            
+            switch (notificationPermission) {
+                case 'granted':
+                    mostrarEstadoPermiso('granted', 'Notificacions habilitades i funcionant correctament');
+                    enableBtn.style.display = 'none';
+                    disableBtn.style.display = 'block';
+                    verificarSuscripcion();
+                    break;
+                    
+                case 'denied':
+                    mostrarEstadoPermiso('denied', 'Notificacions denegades. Canvia la configuració del navegador per habilitar-les');
+                    enableBtn.style.display = 'none';
+                    disableBtn.style.display = 'none';
+                    break;
+                    
+                default:
+                    mostrarEstadoPermiso('default', 'Fes clic a "Habilitar Notificacions" per començar a rebre alertes');
+                    enableBtn.style.display = 'block';
+                    disableBtn.style.display = 'none';
+            }
+        }
+        
+        /**
+         * Mostrar estado de permisos
+         */
+        function mostrarEstadoPermiso(tipo, mensaje) {
+            const statusEl = document.getElementById('permissionStatus');
+            statusEl.className = `permission-status permission-${tipo}`;
+            
+            let icon = 'fa-bell-slash';
+            if (tipo === 'granted') icon = 'fa-bell';
+            if (tipo === 'denied') icon = 'fa-ban';
+            
+            statusEl.innerHTML = `<i class="fas ${icon} me-2"></i>${mensaje}`;
+        }
+        
+        /**
+         * Habilitar notificaciones
+         */
+        async function habilitarNotificaciones() {
+            try {
+                // Pedir permisos
+                const permission = await Notification.requestPermission();
+                notificationPermission = permission;
+                
+                if (permission === 'granted') {
+                    await suscribirseAPush();
+                    actualizarEstadoPermiso();
+                    mostrarNotificacion('¡Notificacions habilitades correctament!', 'success');
+                } else {
+                    actualizarEstadoPermiso();
+                    mostrarNotificacion('Permisos de notificació denegats', 'error');
+                }
+            } catch (error) {
+                console.error('Error habilitant notificacions:', error);
+                mostrarNotificacion('Error habilitant notificacions: ' + error.message, 'error');
+            }
+        }
+        
+        /**
+         * Suscribirse a push notifications
+         */
+        async function suscribirseAPush() {
+            try {
+                const subscription = await swRegistration.pushManager.subscribe({
+                    userVisibleOnly: true,
+                    applicationServerKey: urlBase64ToUint8Array(vapidPublicKey)
+                });
+                
+                pushSubscription = subscription;
+                
+                // Enviar suscripción al servidor
+                await enviarSuscripcionAlServidor(subscription);
+                
+            } catch (error) {
+                console.error('Error suscribint-se a push:', error);
+                throw error;
+            }
+        }
+        
+        /**
+         * Enviar suscripción al servidor
+         */
+        async function enviarSuscripcionAlServidor(subscription) {
+            const response = await fetch('/fase4/notificaciones/api.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    action: 'subscribe',
+                    subscription: subscription
+                })
+            });
+            
+            if (!response.ok) {
+                throw new Error('Error enviant suscripció al servidor');
+            }
+        }
+        
+        /**
+         * Verificar suscripción existente
+         */
+        async function verificarSuscripcion() {
+            try {
+                pushSubscription = await swRegistration.pushManager.getSubscription();
+                if (pushSubscription) {
+                    console.log('Suscripció activa encontrada');
+                }
+            } catch (error) {
+                console.error('Error verificant suscripció:', error);
+            }
+        }
+        
+        /**
+         * Deshabilitar notificaciones
+         */
+        async function deshabilitarNotificaciones() {
+            try {
+                if (pushSubscription) {
+                    await pushSubscription.unsubscribe();
+                    pushSubscription = null;
+                }
+                
+                // Notificar al servidor
+                await fetch('/fase4/notificaciones/api.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        action: 'unsubscribe'
+                    })
+                });
+                
+                notificationPermission = 'default';
+                actualizarEstadoPermiso();
+                mostrarNotificacion('Notificacions deshabilitades', 'info');
+                
+            } catch (error) {
+                console.error('Error deshabilitant notificacions:', error);
+                mostrarNotificacion('Error deshabilitant notificacions', 'error');
+            }
+        }
+        
+        /**
+         * Enviar notificación de prueba
+         */
+        async function enviarNotificacionPrueba() {
+            try {
+                const response = await fetch('/fase4/notificaciones/api.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        action: 'send_test',
+                        title: '🧮 Notificació de Prova - Math Advantage',
+                        message: 'Si veus aquest missatge, les notificacions funcionen perfectament! 🎉',
+                        options: {
+                            tipo: 'sistema',
+                            prioridad: 'normal'
+                        }
+                    })
+                });
+                
+                const result = await response.json();
+                if (result.success) {
+                    mostrarNotificacion('Notificació de prova enviada!', 'success');
+                } else {
+                    mostrarNotificacion('Error enviant notificació de prova', 'error');
+                }
+            } catch (error) {
+                console.error('Error enviant notificació de prova:', error);
+                mostrarNotificacion('Error de connexió', 'error');
+            }
+        }
+        
+        /**
+         * Enviar notificación personalizada
+         */
+        async function enviarNotificacion(event) {
+            event.preventDefault();
+            
+            const formData = {
+                action: 'send_notification',
+                title: document.getElementById('notifTitle').value,
+                message: document.getElementById('notifMessage').value,
+                options: {
+                    tipo: document.getElementById('notifType').value,
+                    prioridad: document.getElementById('notifPriority').value,
+                    url_destino: document.getElementById('notifUrl').value || '/portal/welcome.php'
+                },
+                destinatarios: [{
+                    user_type: document.getElementById('notifTargetType').value
+                }]
+            };
+            
+            try {
+                const response = await fetch('/fase4/notificaciones/api.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData)
+                });
+                
+                const result = await response.json();
+                if (result.success) {
+                    mostrarNotificacion(`Notificació enviada a ${result.enviados} usuaris`, 'success');
+                    document.getElementById('sendNotificationForm').reset();
+                    cargarEstadisticas();
+                } else {
+                    mostrarNotificacion('Error enviant notificació', 'error');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                mostrarNotificacion('Error de connexió', 'error');
+            }
+        }
+        
+        /**
+         * Cargar notificaciones del usuario
+         */
+        async function cargarNotificaciones() {
+            try {
+                const response = await fetch('/fase4/notificaciones/api.php?action=get_notifications');
+                const notifications = await response.json();
+                
+                const listEl = document.getElementById('notificationsList');
+                
+                if (notifications.length === 0) {
+                    listEl.innerHTML = `
+                        <div class="text-center py-4">
+                            <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
+                            <h5 class="text-muted">No hi ha notificacions</h5>
+                            <p class="text-muted">Quan rebis notificacions apareixeran aquí</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                listEl.innerHTML = notifications.map(notif => `
+                    <div class="notification-item ${!notif.leida ? 'unread' : ''} ${notif.prioridad === 'urgente' ? 'urgent' : ''}" 
+                         data-id="${notif.id}">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div class="flex-grow-1">
+                                <h6 class="mb-1">
+                                    <i class="fas fa-${getNotificationIcon(notif.tipo)} me-2"></i>
+                                    ${notif.titulo}
+                                </h6>
+                                <p class="mb-1">${notif.mensaje}</p>
+                                <small class="text-muted">
+                                    <i class="fas fa-clock me-1"></i>
+                                    ${formatDate(notif.created_at)}
+                                    ${notif.prioridad !== 'normal' ? `<span class="badge bg-${getPriorityColor(notif.prioridad)} ms-2">${notif.prioridad}</span>` : ''}
+                                </small>
+                            </div>
+                            <div class="ms-3">
+                                ${!notif.leida ? `
+                                    <button class="action-btn" onclick="marcarComoLeida(${notif.id})">
+                                        <i class="fas fa-check"></i>
+                                    </button>
+                                ` : ''}
+                                ${notif.url_destino ? `
+                                    <button class="action-btn" onclick="abrirNotificacion('${notif.url_destino}')">
+                                        <i class="fas fa-external-link-alt"></i>
+                                    </button>
+                                ` : ''}
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+                
+            } catch (error) {
+                console.error('Error carregant notificacions:', error);
+                document.getElementById('notificationsList').innerHTML = `
+                    <div class="text-center py-4 text-danger">
+                        <i class="fas fa-exclamation-triangle fa-2x mb-3"></i>
+                        <h5>Error carregant notificacions</h5>
+                    </div>
+                `;
+            }
+        }
+        
+        /**
+         * Cargar estadísticas
+         */
+        async function cargarEstadisticas() {
+            try {
+                const response = await fetch('/fase4/notificaciones/api.php?action=get_stats');
+                const stats = await response.json();
+                
+                // Actualizar números
+                document.getElementById('totalNotifications').textContent = stats.total || 0;
+                document.getElementById('deliveredNotifications').textContent = stats.delivered || 0;
+                document.getElementById('readNotifications').textContent = stats.read || 0;
+                document.getElementById('activeSubscriptions').textContent = stats.active_subscriptions || 0;
+                
+                // Crear gráfico si hay datos
+                if (stats.chart_data && stats.chart_data.length > 0) {
+                    crearGrafico(stats.chart_data);
+                }
+                
+            } catch (error) {
+                console.error('Error carregant estadístiques:', error);
+            }
+        }
+        
+        /**
+         * Crear gráfico de estadísticas
+         */
+        function crearGrafico(data) {
+            const ctx = document.getElementById('notificationChart').getContext('2d');
+            
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: data.map(d => d.fecha),
+                    datasets: [{
+                        label: 'Notificacions Enviades',
+                        data: data.map(d => d.total),
+                        borderColor: '#667eea',
+                        backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                        tension: 0.4
+                    }, {
+                        label: 'Notificacions Llegides',
+                        data: data.map(d => d.read),
+                        borderColor: '#10b981',
+                        backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+        
+        /**
+         * Marcar notificación como leída
+         */
+        async function marcarComoLeida(notifId) {
+            try {
+                const response = await fetch('/fase4/notificaciones/api.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        action: 'mark_read',
+                        notification_id: notifId
+                    })
+                });
+                
+                if (response.ok) {
+                    // Actualizar UI
+                    const notifEl = document.querySelector(`[data-id="${notifId}"]`);
+                    notifEl.classList.remove('unread');
+                    notifEl.querySelector('.action-btn')?.remove();
+                }
+            } catch (error) {
+                console.error('Error marcant com llegida:', error);
+            }
+        }
+        
+        /**
+         * Marcar todas como leídas
+         */
+        async function marcarTodasLeidas() {
+            try {
+                const response = await fetch('/fase4/notificaciones/api.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        action: 'mark_all_read'
+                    })
+                });
+                
+                if (response.ok) {
+                    cargarNotificaciones();
+                    mostrarNotificacion('Totes les notificacions marcades com llegides', 'success');
+                }
+            } catch (error) {
+                console.error('Error marcant totes com llegides:', error);
+            }
+        }
+        
+        /**
+         * Abrir notificación
+         */
+        function abrirNotificacion(url) {
+            window.open(url, '_blank');
+        }
+        
+        // Utilidades
+        function urlBase64ToUint8Array(base64String) {
+            const padding = '='.repeat((4 - base64String.length % 4) % 4);
+            const base64 = (base64String + padding)
+                .replace(/\-/g, '+')
+                .replace(/_/g, '/');
+        
+            const rawData = window.atob(base64);
+            const outputArray = new Uint8Array(rawData.length);
+        
+            for (let i = 0; i < rawData.length; ++i) {
+                outputArray[i] = rawData.charCodeAt(i);
+            }
+            return outputArray;
+        }
+        
+        function getNotificationIcon(tipo) {
+            const icons = {
+                'general': 'bell',
+                'academica': 'graduation-cap',
+                'administrativa': 'clipboard',
+                'social': 'users',
+                'sistema': 'cog'
+            };
+            return icons[tipo] || 'bell';
+        }
+        
+        function getPriorityColor(prioridad) {
+            const colors = {
+                'baja': 'secondary',
+                'normal': 'primary',
+                'alta': 'warning',
+                'urgente': 'danger'
+            };
+            return colors[prioridad] || 'primary';
+        }
+        
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('ca-ES', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+        
+        function mostrarNotificacion(mensaje, tipo = 'info') {
+            // Crear notificación temporal en la UI
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `alert alert-${tipo === 'error' ? 'danger' : tipo} alert-dismissible fade show position-fixed`;
+            alertDiv.style.cssText = 'top: 20px; right: 20px; z-index: 9999; max-width: 400px;';
+            alertDiv.innerHTML = `
+                ${mensaje}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            `;
+            
+            document.body.appendChild(alertDiv);
+            
+            // Remover después de 5 segundos
+            setTimeout(() => {
+                if (alertDiv.parentNode) {
+                    alertDiv.remove();
+                }
+            }, 5000);
+        }
+    </script>
+</body>
+</html>

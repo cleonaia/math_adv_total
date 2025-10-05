@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Evaluacions - Math Advantage</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Portal CSS -->
+    <link rel="stylesheet" href="../../portal/assets/css/portal.css">
+    <link rel="stylesheet" href="../../portal/assets/css/dashboard.css">
+    <link rel="stylesheet" href="../../portal/assets/css/responsive.css">
+    
+    <style>
+        .evaluation-card {
+            transition: all 0.3s ease;
+            border: none;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        
+        .evaluation-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+        }
+        
+        .status-badge {
+            font-size: 0.8rem;
+            padding: 0.4rem 0.8rem;
+        }
+        
+        .timer-display {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #dc3545;
+        }
+        
+        .question-card {
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            border-left: 4px solid var(--primary-color);
+        }
+        
+        .option-button {
+            width: 100%;
+            text-align: left;
+            margin: 0.5rem 0;
+            padding: 0.8rem 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .option-button:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .option-button.selected {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .progress-indicator {
+            height: 8px;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .question-navigator {
+            position: sticky;
+            top: 90px;
+            max-height: calc(100vh - 120px);
+            overflow-y: auto;
+        }
+        
+        .nav-question {
+            width: 40px;
+            height: 40px;
+            margin: 5px;
+            border: none;
+            border-radius: 50%;
+            background-color: #e9ecef;
+            color: #6c757d;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-question.answered {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .nav-question.current {
+            background-color: var(--accent-color);
+            color: white;
+            transform: scale(1.1);
+        }
+        
+        .statistics-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            line-height: 1;
+        }
+        
+        .create-evaluation-btn {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            box-shadow: 0 4px 20px rgba(139, 92, 246, 0.4);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+        
+        .create-evaluation-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 30px rgba(139, 92, 246, 0.6);
+        }
+        
+        @media (max-width: 768px) {
+            .question-navigator {
+                position: relative;
+                top: 0;
+                max-height: none;
+                margin-bottom: 1rem;
+            }
+            
+            .create-evaluation-btn {
+                bottom: 1rem;
+                right: 1rem;
+                width: 50px;
+                height: 50px;
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body class="dashboard-page">
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top" style="background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="../../index.html">
+                <img src="../../img/logo_math-advantatge.png" alt="Math Advantage" height="40" class="me-2">
+                <span>Avaluacions Online</span>
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="../../portal/welcome.php">
+                            <i class="fas fa-home me-2"></i>Portal
+                        </a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-user me-2"></i>Perfil
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#" onclick="cerrarSesion()">
+                                <i class="fas fa-sign-out-alt me-2"></i>Tancar Sessió
+                            </a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid mt-4 pt-4" id="main-content">
+        <!-- Panel de Control Principal -->
+        <div id="dashboard-view">
+            <div class="row mb-4">
+                <div class="col-12">
+                    <h2 class="text-gradient"><i class="fas fa-clipboard-check me-3"></i>Sistema d'Avaluacions</h2>
+                    <p class="text-muted">Gestiona avaluacions, exàmens i segueix el progrés dels estudiants</p>
+                </div>
+            </div>
+
+            <!-- Estadísticas Rápidas -->
+            <div class="row mb-4" id="teacher-stats">
+                <div class="col-md-3 col-sm-6 mb-3">
+                    <div class="statistics-card">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <div class="stat-number" id="total-evaluations">0</div>
+                                <small>Avaluacions Creades</small>
+                            </div>
+                            <i class="fas fa-file-alt fa-2x opacity-75"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6 mb-3">
+                    <div class="statistics-card">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <div class="stat-number" id="total-students">0</div>
+                                <small>Estudiants Participants</small>
+                            </div>
+                            <i class="fas fa-users fa-2x opacity-75"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6 mb-3">
+                    <div class="statistics-card">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <div class="stat-number" id="avg-score">0%</div>
+                                <small>Puntuació Mitjana</small>
+                            </div>
+                            <i class="fas fa-chart-line fa-2x opacity-75"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6 mb-3">
+                    <div class="statistics-card">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <div class="stat-number" id="completion-rate">0%</div>
+                                <small>Taxa de Finalització</small>
+                            </div>
+                            <i class="fas fa-trophy fa-2x opacity-75"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Lista de Evaluaciones -->
+            <div class="row">
+                <div class="col-12">
+                    <div class="card dashboard-card">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0">
+                                <i class="fas fa-list me-2"></i>Les Meves Avaluacions
+                            </h5>
+                            <div>
+                                <button class="btn btn-outline-primary me-2" onclick="filtrarEvaluaciones()">
+                                    <i class="fas fa-filter me-2"></i>Filtrar
+                                </button>
+                                <button class="btn btn-primary" onclick="crearEvaluacion()">
+                                    <i class="fas fa-plus me-2"></i>Nova Avaluació
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="row" id="evaluations-container">
+                                <!-- Las evaluaciones se cargarán dinámicamente aquí -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Vista de Evaluación Activa -->
+        <div id="evaluation-view" style="display: none;">
+            <div class="row">
+                <!-- Navegador de Preguntas -->
+                <div class="col-lg-3">
+                    <div class="question-navigator">
+                        <div class="card dashboard-card mb-3">
+                            <div class="card-header">
+                                <h6 class="mb-0"><i class="fas fa-clock me-2"></i>Temps Restant</h6>
+                            </div>
+                            <div class="card-body text-center">
+                                <div class="timer-display" id="timer">00:00</div>
+                                <div class="progress progress-indicator mt-2">
+                                    <div class="progress-bar bg-danger" id="timer-progress" style="width: 100%"></div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="card dashboard-card">
+                            <div class="card-header">
+                                <h6 class="mb-0"><i class="fas fa-list-ol me-2"></i>Preguntes</h6>
+                            </div>
+                            <div class="card-body">
+                                <div id="question-navigator-buttons" class="d-flex flex-wrap justify-content-center">
+                                    <!-- Botones de navegación de preguntas -->
+                                </div>
+                                <div class="mt-3 text-center">
+                                    <small class="text-muted">
+                                        <span id="answered-count">0</span> de <span id="total-questions">0</span> contestades
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contenido de la Pregunta -->
+                <div class="col-lg-9">
+                    <div class="card question-card">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h5 id="question-number">Pregunta 1</h5>
+                                <span class="badge bg-primary" id="question-points">1 punt</span>
+                            </div>
+                            
+                            <div id="question-content">
+                                <!-- Contenido de la pregunta se carga aquí -->
+                            </div>
+                            
+                            <div class="mt-4 d-flex justify-content-between">
+                                <button class="btn btn-outline-secondary" id="prev-btn" onclick="previousQuestion()">
+                                    <i class="fas fa-chevron-left me-2"></i>Anterior
+                                </button>
+                                <button class="btn btn-outline-secondary" id="next-btn" onclick="nextQuestion()">
+                                    Següent<i class="fas fa-chevron-right ms-2"></i>
+                                </button>
+                                <button class="btn btn-success" id="finish-btn" onclick="finishEvaluation()" style="display: none;">
+                                    <i class="fas fa-check me-2"></i>Finalitzar Avaluació
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Vista de Resultados -->
+        <div id="results-view" style="display: none;">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="card dashboard-card text-center">
+                        <div class="card-body">
+                            <i class="fas fa-trophy fa-4x text-warning mb-3"></i>
+                            <h2>Avaluació Completada!</h2>
+                            
+                            <div class="row mt-4">
+                                <div class="col-md-4">
+                                    <div class="stat-number text-primary" id="final-score">0</div>
+                                    <small class="text-muted">Puntuació Final</small>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="stat-number text-success" id="final-percentage">0%</div>
+                                    <small class="text-muted">Percentatge</small>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="stat-number text-info" id="final-time">00:00</div>
+                                    <small class="text-muted">Temps Utilitzat</small>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-4">
+                                <button class="btn btn-primary me-3" onclick="viewDetailedResults()">
+                                    <i class="fas fa-chart-bar me-2"></i>Veure Detalls
+                                </button>
+                                <button class="btn btn-outline-primary" onclick="backToDashboard()">
+                                    <i class="fas fa-home me-2"></i>Tornar al Dashboard
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para Crear/Editar Evaluación -->
+    <div class="modal fade" id="evaluationModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="fas fa-plus-circle me-2"></i>Nova Avaluació
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <form id="evaluationForm">
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Títol de l'Avaluació *</label>
+                                <input type="text" class="form-control" name="titulo" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Tipus *</label>
+                                <select class="form-select" name="tipo" required>
+                                    <option value="">Selecciona tipus</option>
+                                    <option value="examen">Examen</option>
+                                    <option value="quiz">Quiz</option>
+                                    <option value="tarea">Tarea</option>
+                                    <option value="evaluacion_continua">Avaluació Contínua</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Descripció</label>
+                            <textarea class="form-control" name="descripcion" rows="3"></textarea>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Data d'Inici *</label>
+                                <input type="datetime-local" class="form-control" name="fecha_inicio" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Data de Fi *</label>
+                                <input type="datetime-local" class="form-control" name="fecha_fin" required>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">Temps Límit (min)</label>
+                                <input type="number" class="form-control" name="tiempo_limite" min="1" max="300">
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">Intents Permesos</label>
+                                <input type="number" class="form-control" name="intentos_permitidos" value="1" min="1" max="5">
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">Puntuació Màxima</label>
+                                <input type="number" class="form-control" name="puntuacion_maxima" value="100" step="0.1" min="1">
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="mostrar_resultados" checked>
+                                <label class="form-check-label">
+                                    Mostrar resultats als estudiants després de completar
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel·lar</button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save me-2"></i>Guardar Avaluació
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Botón Flotante para Crear Evaluación -->
+    <button class="create-evaluation-btn" onclick="crearEvaluacion()" title="Crear Nova Avaluació">
+        <i class="fas fa-plus"></i>
+    </button>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Variables globales
+        let currentEvaluation = null;
+        let currentQuestionIndex = 0;
+        let questions = [];
+        let answers = {};
+        let startTime = null;
+        let timerInterval = null;
+        
+        // Cargar datos al iniciar
+        document.addEventListener('DOMContentLoaded', function() {
+            loadDashboard();
+        });
+        
+        // Cargar dashboard principal
+        function loadDashboard() {
+            // Simular carga de datos (aquí iría la llamada AJAX real)
+            document.getElementById('total-evaluations').textContent = '12';
+            document.getElementById('total-students').textContent = '156';
+            document.getElementById('avg-score').textContent = '85%';
+            document.getElementById('completion-rate').textContent = '92%';
+            
+            loadEvaluations();
+        }
+        
+        // Cargar lista de evaluaciones
+        function loadEvaluations() {
+            // Datos de ejemplo - en producción vendría del servidor
+            const evaluaciones = [
+                {
+                    id: 1,
+                    titulo: 'Examen de Álgebra Lineal',
+                    tipo: 'examen',
+                    fecha_inicio: '2024-10-10 09:00:00',
+                    fecha_fin: '2024-10-17 23:59:59',
+                    total_preguntas: 15,
+                    total_estudiantes: 23,
+                    estado: 'publicado'
+                },
+                {
+                    id: 2,
+                    titulo: 'Quiz: Derivadas',
+                    tipo: 'quiz',
+                    fecha_inicio: '2024-10-05 10:00:00',
+                    fecha_fin: '2024-10-12 18:00:00',
+                    total_preguntas: 8,
+                    total_estudiantes: 18,
+                    estado: 'cerrado'
+                }
+            ];
+            
+            const container = document.getElementById('evaluations-container');
+            container.innerHTML = '';
+            
+            evaluaciones.forEach(eval => {
+                const card = createEvaluationCard(eval);
+                container.appendChild(card);
+            });
+        }
+        
+        // Crear tarjeta de evaluación
+        function createEvaluationCard(evaluation) {
+            const col = document.createElement('div');
+            col.className = 'col-lg-6 col-xl-4 mb-3';
+            
+            const statusColors = {
+                'borrador': 'secondary',
+                'publicado': 'success',
+                'cerrado': 'danger'
+            };
+            
+            const typeIcons = {
+                'examen': 'fas fa-file-alt',
+                'quiz': 'fas fa-question-circle',
+                'tarea': 'fas fa-tasks',
+                'evaluacion_continua': 'fas fa-chart-line'
+            };
+            
+            col.innerHTML = `
+                <div class="card evaluation-card h-100">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <span class="badge status-badge bg-${statusColors[evaluation.estado]}">
+                            ${evaluation.estado.charAt(0).toUpperCase() + evaluation.estado.slice(1)}
+                        </span>
+                        <i class="${typeIcons[evaluation.tipo]} text-primary"></i>
+                    </div>
+                    <div class="card-body">
+                        <h6 class="card-title">${evaluation.titulo}</h6>
+                        <div class="small text-muted mb-3">
+                            <div><i class="fas fa-calendar me-2"></i>${formatDate(evaluation.fecha_inicio)} - ${formatDate(evaluation.fecha_fin)}</div>
+                            <div><i class="fas fa-question me-2"></i>${evaluation.total_preguntas} preguntes</div>
+                            <div><i class="fas fa-users me-2"></i>${evaluation.total_estudiantes} participants</div>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <div class="btn-group w-100" role="group">
+                            <button class="btn btn-outline-primary btn-sm" onclick="editEvaluation(${evaluation.id})">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn btn-outline-info btn-sm" onclick="viewResults(${evaluation.id})">
+                                <i class="fas fa-chart-bar"></i>
+                            </button>
+                            <button class="btn btn-outline-success btn-sm" onclick="startEvaluation(${evaluation.id})">
+                                <i class="fas fa-play"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            return col;
+        }
+        
+        // Crear nueva evaluación
+        function crearEvaluacion() {
+            document.getElementById('evaluationForm').reset();
+            new bootstrap.Modal(document.getElementById('evaluationModal')).show();
+        }
+        
+        // Manejar envío del formulario
+        document.getElementById('evaluationForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const evaluationData = Object.fromEntries(formData.entries());
+            
+            // Aquí iría la llamada AJAX para guardar la evaluación
+            console.log('Guardando evaluación:', evaluationData);
+            
+            // Cerrar modal y recargar lista
+            bootstrap.Modal.getInstance(document.getElementById('evaluationModal')).hide();
+            loadEvaluations();
+            
+            // Mostrar notificación de éxito
+            showNotification('Avaluació creada correctament!', 'success');
+        });
+        
+        // Iniciar evaluación (modo estudiante)
+        function startEvaluation(evaluationId) {
+            // Simular carga de preguntas
+            questions = [
+                {
+                    id: 1,
+                    pregunta: '¿Cuál es la derivada de x²?',
+                    tipo: 'multiple_choice',
+                    opciones: ['2x', 'x', '2', 'x²'],
+                    puntos: 2
+                },
+                {
+                    id: 2,
+                    pregunta: 'Resuelve: ∫ 2x dx',
+                    tipo: 'texto_libre',
+                    puntos: 3
+                }
+            ];
+            
+            currentQuestionIndex = 0;
+            answers = {};
+            startTime = new Date();
+            
+            showEvaluationView();
+            setupTimer(60); // 60 minutos de ejemplo
+            loadQuestion();
+        }
+        
+        // Mostrar vista de evaluación
+        function showEvaluationView() {
+            document.getElementById('dashboard-view').style.display = 'none';
+            document.getElementById('results-view').style.display = 'none';
+            document.getElementById('evaluation-view').style.display = 'block';
+            
+            setupQuestionNavigator();
+        }
+        
+        // Configurar navegador de preguntas
+        function setupQuestionNavigator() {
+            const container = document.getElementById('question-navigator-buttons');
+            const totalQuestions = document.getElementById('total-questions');
+            
+            container.innerHTML = '';
+            totalQuestions.textContent = questions.length;
+            
+            questions.forEach((q, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'nav-question';
+                btn.textContent = index + 1;
+                btn.onclick = () => goToQuestion(index);
+                container.appendChild(btn);
+            });
+        }
+        
+        // Cargar pregunta actual
+        function loadQuestion() {
+            const question = questions[currentQuestionIndex];
+            const isLast = currentQuestionIndex === questions.length - 1;
+            
+            document.getElementById('question-number').textContent = `Pregunta ${currentQuestionIndex + 1}`;
+            document.getElementById('question-points').textContent = `${question.puntos} ${question.puntos === 1 ? 'punt' : 'punts'}`;
+            
+            const content = document.getElementById('question-content');
+            content.innerHTML = renderQuestion(question);
+            
+            // Actualizar botones de navegación
+            document.getElementById('prev-btn').style.display = currentQuestionIndex === 0 ? 'none' : 'inline-block';
+            document.getElementById('next-btn').style.display = isLast ? 'none' : 'inline-block';
+            document.getElementById('finish-btn').style.display = isLast ? 'inline-block' : 'none';
+            
+            // Actualizar navegador
+            updateQuestionNavigator();
+            updateAnsweredCount();
+        }
+        
+        // Renderizar pregunta según su tipo
+        function renderQuestion(question) {
+            let html = `<h5 class="mb-4">${question.pregunta}</h5>`;
+            
+            if (question.tipo === 'multiple_choice') {
+                question.opciones.forEach((opcion, index) => {
+                    const selected = answers[question.id] === opcion ? 'selected' : '';
+                    html += `
+                        <button class="btn btn-outline-primary option-button ${selected}" 
+                                onclick="selectOption(${question.id}, '${opcion}', this)">
+                            ${String.fromCharCode(65 + index)}. ${opcion}
+                        </button>
+                    `;
+                });
+            } else if (question.tipo === 'texto_libre') {
+                const value = answers[question.id] || '';
+                html += `
+                    <textarea class="form-control" rows="4" placeholder="Escriu la teva resposta aquí..."
+                              onchange="saveTextAnswer(${question.id}, this.value)">${value}</textarea>
+                `;
+            }
+            
+            return html;
+        }
+        
+        // Seleccionar opción múltiple
+        function selectOption(questionId, option, button) {
+            // Remover selección anterior
+            button.parentElement.querySelectorAll('.option-button').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+            
+            // Seleccionar nueva opción
+            button.classList.add('selected');
+            answers[questionId] = option;
+            
+            updateQuestionNavigator();
+            updateAnsweredCount();
+        }
+        
+        // Guardar respuesta de texto
+        function saveTextAnswer(questionId, value) {
+            answers[questionId] = value.trim();
+            updateQuestionNavigator();
+            updateAnsweredCount();
+        }
+        
+        // Ir a pregunta específica
+        function goToQuestion(index) {
+            currentQuestionIndex = index;
+            loadQuestion();
+        }
+        
+        // Pregunta anterior
+        function previousQuestion() {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                loadQuestion();
+            }
+        }
+        
+        // Pregunta siguiente
+        function nextQuestion() {
+            if (currentQuestionIndex < questions.length - 1) {
+                currentQuestionIndex++;
+                loadQuestion();
+            }
+        }
+        
+        // Actualizar navegador de preguntas
+        function updateQuestionNavigator() {
+            const buttons = document.querySelectorAll('.nav-question');
+            buttons.forEach((btn, index) => {
+                btn.classList.remove('answered', 'current');
+                
+                if (index === currentQuestionIndex) {
+                    btn.classList.add('current');
+                } else if (answers[questions[index].id] !== undefined) {
+                    btn.classList.add('answered');
+                }
+            });
+        }
+        
+        // Actualizar contador de preguntas contestadas
+        function updateAnsweredCount() {
+            const answered = Object.keys(answers).length;
+            document.getElementById('answered-count').textContent = answered;
+        }
+        
+        // Configurar temporizador
+        function setupTimer(minutes) {
+            const totalSeconds = minutes * 60;
+            let remainingSeconds = totalSeconds;
+            
+            timerInterval = setInterval(() => {
+                remainingSeconds--;
+                
+                const mins = Math.floor(remainingSeconds / 60);
+                const secs = remainingSeconds % 60;
+                
+                document.getElementById('timer').textContent = 
+                    `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+                
+                const progressPercent = (remainingSeconds / totalSeconds) * 100;
+                document.getElementById('timer-progress').style.width = progressPercent + '%';
+                
+                if (remainingSeconds <= 0) {
+                    clearInterval(timerInterval);
+                    finishEvaluation();
+                }
+            }, 1000);
+        }
+        
+        // Finalizar evaluación
+        function finishEvaluation() {
+            if (timerInterval) {
+                clearInterval(timerInterval);
+            }
+            
+            // Calcular resultados
+            const endTime = new Date();
+            const timeUsed = Math.round((endTime - startTime) / 1000 / 60); // minutos
+            
+            // Aquí iría la lógica para calcular la puntuación real
+            const finalScore = 85; // Ejemplo
+            const finalPercentage = 85; // Ejemplo
+            
+            // Mostrar resultados
+            document.getElementById('final-score').textContent = finalScore;
+            document.getElementById('final-percentage').textContent = finalPercentage + '%';
+            document.getElementById('final-time').textContent = timeUsed + ' min';
+            
+            showResultsView();
+        }
+        
+        // Mostrar vista de resultados
+        function showResultsView() {
+            document.getElementById('dashboard-view').style.display = 'none';
+            document.getElementById('evaluation-view').style.display = 'none';
+            document.getElementById('results-view').style.display = 'block';
+        }
+        
+        // Volver al dashboard
+        function backToDashboard() {
+            document.getElementById('dashboard-view').style.display = 'block';
+            document.getElementById('evaluation-view').style.display = 'none';
+            document.getElementById('results-view').style.display = 'none';
+            
+            loadDashboard();
+        }
+        
+        // Funciones auxiliares
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('ca-ES');
+        }
+        
+        function showNotification(message, type = 'info') {
+            // Implementar sistema de notificaciones
+            console.log(`${type.toUpperCase()}: ${message}`);
+        }
+        
+        function editEvaluation(id) {
+            // Implementar edición de evaluación
+            console.log('Editar evaluación:', id);
+        }
+        
+        function viewResults(id) {
+            // Implementar vista de resultados detallada
+            console.log('Ver resultados:', id);
+        }
+        
+        function filtrarEvaluaciones() {
+            // Implementar filtros
+            console.log('Filtrar evaluaciones');
+        }
+        
+        function viewDetailedResults() {
+            // Implementar vista detallada de resultados
+            console.log('Ver resultados detallados');
+        }
+        
+        function cerrarSesion() {
+            if (confirm('¿Estàs segur que vols tancar la sessió?')) {
+                window.location.href = '../../portal/login.php';
+            }
+        }
+    </script>
+</body>
+</html>

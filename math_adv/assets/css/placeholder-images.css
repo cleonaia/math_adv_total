@@ -1,0 +1,53 @@
+/* Placeholder CSS for images - Replace with actual images */
+.hero-image img,
+[src*="hero-math.jpg"],
+[src*="metodologia.jpg"],
+[src*="profesor-1.jpg"],
+[src*="profesor-2.jpg"],
+[src*="profesor-3.jpg"] {
+    /* Placeholder styling */
+    background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+    border: 2px dashed #cbd5e1;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #64748b;
+    font-weight: 500;
+}
+
+.hero-image img::before,
+[src*="hero-math.jpg"]::before,
+[src*="metodologia.jpg"]::before,
+[src*="profesor-1.jpg"]::before,
+[src*="profesor-2.jpg"]::before,
+[src*="profesor-3.jpg"]::before {
+    content: "📸 Imatge Placeholder";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    font-size: 0.9rem;
+}
+
+/* Specific placeholder content */
+[src*="hero-math.jpg"]::before {
+    content: "📚 Estudiants de Matemàtiques";
+}
+
+[src*="metodologia.jpg"]::before {
+    content: "🎯 Metodologia Math Advantage";
+}
+
+[src*="profesor-1.jpg"]::before {
+    content: "👩‍🏫 Dr. Maria García";
+}
+
+[src*="profesor-2.jpg"]::before {
+    content: "👨‍🏫 Ing. Joan Martínez";
+}
+
+[src*="profesor-3.jpg"]::before {
+    content: "👩‍🏫 Lic. Anna López";
+}

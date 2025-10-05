@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard de Ciberseguridad - Math Advantage</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <style>
+        :root {
+            --primary-color: #dc2626; /* Red for security */
+            --secondary-color: #ea580c; /* Orange */
+            --success-color: #16a34a; /* Green */
+            --warning-color: #ca8a04; /* Yellow */
+            --info-color: #2563eb; /* Blue */
+            --dark-color: #1f2937;
+            --light-color: #f8fafc;
+        }
+        
+        body {
+            background: linear-gradient(135deg, var(--light-color) 0%, #f1f5f9 100%);
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .security-header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+        }
+        
+        .threat-level {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .threat-low { background: var(--success-color); color: white; }
+        .threat-medium { background: var(--warning-color); color: white; }
+        .threat-high { background: var(--primary-color); color: white; }
+        
+        .security-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-left: 4px solid var(--primary-color);
+        }
+        
+        .metric-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+        
+        .alert-item {
+            padding: 1rem;
+            border-left: 4px solid var(--warning-color);
+            background: rgba(234, 88, 12, 0.1);
+            margin-bottom: 0.5rem;
+            border-radius: 4px;
+        }
+        
+        .alert-critical {
+            border-color: var(--primary-color);
+            background: rgba(220, 38, 38, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <!-- Security Header -->
+    <div class="security-header">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col">
+                    <h1 class="h2 mb-1">
+                        <i class="fas fa-shield-alt me-2"></i>
+                        Dashboard de Ciberseguridad
+                        <span class="threat-level threat-low" id="threatLevel">BAIX RISC</span>
+                    </h1>
+                    <p class="mb-0 opacity-75">Monitoratge de seguretat en temps real</p>
+                </div>
+                <div class="col-auto">
+                    <button class="btn btn-light btn-sm me-2" onclick="exportSecurityReport()">
+                        <i class="fas fa-download me-1"></i> Exportar Informe
+                    </button>
+                    <button class="btn btn-outline-light btn-sm" onclick="refreshSecurityData()">
+                        <i class="fas fa-sync-alt me-1"></i> Actualitzar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Security Metrics -->
+        <div class="row g-4 mb-4">
+            <div class="col-md-3">
+                <div class="security-card">
+                    <div class="d-flex align-items-center mb-2">
+                        <i class="fas fa-exclamation-triangle text-danger me-2"></i>
+                        <h6 class="mb-0">Incidents Crítics</h6>
+                    </div>
+                    <div class="metric-value" id="criticalIncidents">0</div>
+                    <small class="text-muted">Últimes 24h</small>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="security-card">
+                    <div class="d-flex align-items-center mb-2">
+                        <i class="fas fa-user-slash text-warning me-2"></i>
+                        <h6 class="mb-0">Intents de Login</h6>
+                    </div>
+                    <div class="metric-value text-warning" id="failedLogins">0</div>
+                    <small class="text-muted">Fallits última hora</small>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="security-card">
+                    <div class="d-flex align-items-center mb-2">
+                        <i class="fas fa-ban text-danger me-2"></i>
+                        <h6 class="mb-0">IPs Bloquejades</h6>
+                    </div>
+                    <div class="metric-value text-danger" id="blockedIPs">0</div>
+                    <small class="text-muted">Actualment actius</small>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="security-card">
+                    <div class="d-flex align-items-center mb-2">
+                        <i class="fas fa-users text-success me-2"></i>
+                        <h6 class="mb-0">Sessions Actives</h6>
+                    </div>
+                    <div class="metric-value text-success" id="activeSessions">0</div>
+                    <small class="text-muted">Usuaris connectats</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Alerts and Charts -->
+        <div class="row g-4">
+            <div class="col-lg-8">
+                <div class="security-card">
+                    <h5 class="mb-3">
+                        <i class="fas fa-chart-line me-2"></i>
+                        Incidents de Seguretat (7 dies)
+                    </h5>
+                    <canvas id="securityChart" height="300"></canvas>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="security-card">
+                    <h5 class="mb-3">
+                        <i class="fas fa-bell me-2"></i>
+                        Alertes Recents
+                    </h5>
+                    <div id="alertsList" style="max-height: 300px; overflow-y: auto;">
+                        <!-- Alerts will be loaded here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Security Log Table -->
+        <div class="security-card mt-4">
+            <h5 class="mb-3">
+                <i class="fas fa-list me-2"></i>
+                Log d'Esdeveniments de Seguretat
+            </h5>
+            <div class="table-responsive">
+                <table class="table table-striped" id="securityLogTable">
+                    <thead>
+                        <tr>
+                            <th>Timestamp</th>
+                            <th>Tipus d'Esdeveniment</th>
+                            <th>Severitat</th>
+                            <th>IP</th>
+                            <th>Usuari</th>
+                            <th>Detalls</th>
+                        </tr>
+                    </thead>
+                    <tbody id="securityLogBody">
+                        <!-- Data will be loaded here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Security Configuration -->
+        <div class="security-card mt-4">
+            <h5 class="mb-3">
+                <i class="fas fa-cog me-2"></i>
+                Configuració de Seguretat
+            </h5>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="mb-3">
+                        <label class="form-label">Intents màxims de login</label>
+                        <input type="number" class="form-control" id="maxLoginAttempts" value="5">
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="mb-3">
+                        <label class="form-label">Durada del bloqueig (min)</label>
+                        <input type="number" class="form-control" id="lockoutDuration" value="15">
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="mb-3">
+                        <label class="form-label">Timeout de sessió (min)</label>
+                        <input type="number" class="form-control" id="sessionTimeout" value="60">
+                    </div>
+                </div>
+            </div>
+            <button class="btn btn-primary" onclick="updateSecurityConfig()">
+                <i class="fas fa-save me-1"></i> Guardar Configuració
+            </button>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let securityChart;
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            loadSecurityData();
+            initializeChart();
+            setInterval(loadSecurityData, 30000); // Update every 30 seconds
+        });
+        
+        async function loadSecurityData() {
+            try {
+                const response = await fetch('security_api.php?action=dashboard');
+                const data = await response.json();
+                
+                if (data.success) {
+                    updateMetrics(data.data);
+                    updateAlerts(data.data.alerts);
+                    updateSecurityLog(data.data.recent_logs);
+                    updateThreatLevel(data.data.threat_level);
+                }
+            } catch (error) {
+                console.error('Error loading security data:', error);
+                showNotification('Error carregant dades de seguretat', 'danger');
+            }
+        }
+        
+        function updateMetrics(data) {
+            document.getElementById('criticalIncidents').textContent = data.critical_incidents || 0;
+            document.getElementById('failedLogins').textContent = data.failed_logins || 0;
+            document.getElementById('blockedIPs').textContent = data.blocked_ips || 0;
+            document.getElementById('activeSessions').textContent = data.active_sessions || 0;
+        }
+        
+        function updateAlerts(alerts) {
+            const alertsList = document.getElementById('alertsList');
+            alertsList.innerHTML = '';
+            
+            if (!alerts || alerts.length === 0) {
+                alertsList.innerHTML = '<div class="text-muted text-center py-3">No hi ha alertes recents</div>';
+                return;
+            }
+            
+            alerts.forEach(alert => {
+                const alertDiv = document.createElement('div');
+                alertDiv.className = `alert-item ${alert.severity === 'critical' ? 'alert-critical' : ''}`;
+                alertDiv.innerHTML = `
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <strong>${alert.event_type}</strong>
+                            <br>
+                            <small class="text-muted">${alert.created_at}</small>
+                        </div>
+                        <span class="badge bg-${alert.severity === 'critical' ? 'danger' : 'warning'}">${alert.severity}</span>
+                    </div>
+                    ${alert.description ? `<div class="mt-2 small">${alert.description}</div>` : ''}
+                `;
+                alertsList.appendChild(alertDiv);
+            });
+        }
+        
+        function updateSecurityLog(logs) {
+            const logBody = document.getElementById('securityLogBody');
+            logBody.innerHTML = '';
+            
+            if (!logs || logs.length === 0) {
+                logBody.innerHTML = '<tr><td colspan="6" class="text-center text-muted">No hi ha esdeveniments recents</td></tr>';
+                return;
+            }
+            
+            logs.forEach(log => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${new Date(log.created_at).toLocaleString()}</td>
+                    <td>${log.event_type}</td>
+                    <td><span class="badge bg-${getSeverityColor(log.severity)}">${log.severity}</span></td>
+                    <td>${log.ip_address}</td>
+                    <td>${log.user_id || 'Anònim'}</td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-primary" onclick="showLogDetails('${log.id}')">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </td>
+                `;
+                logBody.appendChild(row);
+            });
+        }
+        
+        function updateThreatLevel(level) {
+            const threatElement = document.getElementById('threatLevel');
+            threatElement.className = 'threat-level threat-' + level;
+            
+            const levels = {
+                'low': 'BAIX RISC',
+                'medium': 'RISC MODERAT',  
+                'high': 'ALT RISC'
+            };
+            
+            threatElement.textContent = levels[level] || 'DESCONEGUT';
+        }
+        
+        function initializeChart() {
+            const ctx = document.getElementById('securityChart').getContext('2d');
+            
+            securityChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: getLast7Days(),
+                    datasets: [
+                        {
+                            label: 'Incidents Crítics',
+                            data: [0, 1, 0, 2, 0, 0, 1],
+                            borderColor: '#dc2626',
+                            backgroundColor: 'rgba(220, 38, 38, 0.1)',
+                            tension: 0.4
+                        },
+                        {
+                            label: 'Intents Fallits',
+                            data: [5, 12, 8, 15, 6, 9, 11],
+                            borderColor: '#ca8a04',
+                            backgroundColor: 'rgba(202, 138, 4, 0.1)',
+                            tension: 0.4
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+        
+        function getLast7Days() {
+            const days = [];
+            for (let i = 6; i >= 0; i--) {
+                const date = new Date();
+                date.setDate(date.getDate() - i);
+                days.push(date.toLocaleDateString('ca-ES', { month: 'short', day: 'numeric' }));
+            }
+            return days;
+        }
+        
+        function getSeverityColor(severity) {
+            switch(severity) {
+                case 'critical': return 'danger';
+                case 'warning': return 'warning';
+                case 'info': return 'info';
+                default: return 'secondary';
+            }
+        }
+        
+        function refreshSecurityData() {
+            loadSecurityData();
+            showNotification('Dades de seguretat actualitzades', 'success');
+        }
+        
+        function exportSecurityReport() {
+            window.open('security_api.php?action=export_report', '_blank');
+        }
+        
+        function updateSecurityConfig() {
+            const config = {
+                max_login_attempts: document.getElementById('maxLoginAttempts').value,
+                lockout_duration: document.getElementById('lockoutDuration').value,
+                session_timeout: document.getElementById('sessionTimeout').value
+            };
+            
+            fetch('security_api.php?action=update_config', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(config)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showNotification('Configuració actualitzada correctament', 'success');
+                } else {
+                    showNotification('Error actualitzant configuració', 'danger');
+                }
+            });
+        }
+        
+        function showLogDetails(logId) {
+            // Show modal with log details
+            alert('Detalls del log #' + logId + ' (implementar modal)');
+        }
+        
+        function showNotification(message, type) {
+            const alert = document.createElement('div');
+            alert.className = `alert alert-${type} alert-dismissible fade show position-fixed`;
+            alert.style.cssText = 'top: 20px; right: 20px; z-index: 9999; min-width: 300px;';
+            alert.innerHTML = `
+                ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            `;
+            
+            document.body.appendChild(alert);
+            
+            setTimeout(() => {
+                if (alert.parentNode) {
+                    alert.remove();
+                }
+            }, 5000);
+        }
+    </script>
+</body>
+</html>

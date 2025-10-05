@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gamificació - Math Advantage</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding-top: 76px;
+        }
+        
+        .profile-card {
+            background: linear-gradient(135deg, #8b5cf6 0%, #06b6d4 100%);
+            color: white;
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+            margin-bottom: 2rem;
+        }
+        
+        .avatar-container {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 1rem;
+        }
+        
+        .avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            border: 4px solid rgba(255,255,255,0.3);
+        }
+        
+        .level-badge {
+            position: absolute;
+            bottom: -5px;
+            right: -5px;
+            background: #f59e0b;
+            color: white;
+            border-radius: 50%;
+            width: 35px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            border: 3px solid white;
+        }
+        
+        .xp-bar {
+            background: rgba(255,255,255,0.2);
+            height: 12px;
+            border-radius: 6px;
+            overflow: hidden;
+            margin: 1rem 0;
+        }
+        
+        .xp-progress {
+            background: linear-gradient(90deg, #10b981 0%, #34d399 100%);
+            height: 100%;
+            border-radius: 6px;
+            transition: width 0.3s ease;
+        }
+        
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 1.8rem;
+            font-weight: bold;
+            line-height: 1;
+        }
+        
+        .stat-label {
+            font-size: 0.8rem;
+            opacity: 0.9;
+            margin-top: 0.2rem;
+        }
+        
+        .achievement-card {
+            background: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            border: 3px solid transparent;
+        }
+        
+        .achievement-card.unlocked {
+            border-color: #10b981;
+            transform: scale(1.02);
+        }
+        
+        .achievement-card.locked {
+            opacity: 0.6;
+            filter: grayscale(50%);
+        }
+        
+        .achievement-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-right: 1rem;
+            flex-shrink: 0;
+        }
+        
+        .rarity-comun { background: #94a3b8; color: white; }
+        .rarity-raro { background: #3b82f6; color: white; }
+        .rarity-epico { background: #8b5cf6; color: white; }
+        .rarity-legendario { background: #f59e0b; color: white; }
+        
+        .leaderboard-card {
+            background: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        
+        .leaderboard-item {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            margin: 0.5rem 0;
+            background: #f8fafc;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .leaderboard-item:hover {
+            background: #e2e8f0;
+        }
+        
+        .leaderboard-item.me {
+            background: linear-gradient(135deg, #8b5cf6 0%, #06b6d4 100%);
+            color: white;
+        }
+        
+        .rank-badge {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 1rem;
+            flex-shrink: 0;
+        }
+        
+        .rank-1 { background: #ffd700; color: #92400e; }
+        .rank-2 { background: #c0c0c0; color: #475569; }
+        .rank-3 { background: #cd7f32; color: white; }
+        .rank-other { background: #e2e8f0; color: #64748b; }
+        
+        .progress-ring {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            margin: 0 auto;
+        }
+        
+        .progress-ring svg {
+            width: 100%;
+            height: 100%;
+            transform: rotate(-90deg);
+        }
+        
+        .progress-ring circle {
+            fill: none;
+            stroke-width: 8;
+        }
+        
+        .progress-ring .background {
+            stroke: rgba(255,255,255,0.2);
+        }
+        
+        .progress-ring .progress {
+            stroke: #10b981;
+            stroke-linecap: round;
+            transition: stroke-dasharray 0.3s ease;
+        }
+        
+        .progress-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: white;
+        }
+        
+        .progress-percentage {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+        
+        .progress-label {
+            font-size: 0.8rem;
+            opacity: 0.9;
+        }
+        
+        .notification-achievement {
+            position: fixed;
+            top: 100px;
+            right: 2rem;
+            background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(16, 185, 129, 0.3);
+            z-index: 1050;
+            transform: translateX(400px);
+            transition: transform 0.5s ease;
+        }
+        
+        .notification-achievement.show {
+            transform: translateX(0);
+        }
+        
+        @media (max-width: 768px) {
+            .profile-card {
+                padding: 1.5rem;
+            }
+            
+            .avatar {
+                width: 80px;
+                height: 80px;
+                font-size: 2rem;
+            }
+            
+            .level-badge {
+                width: 28px;
+                height: 28px;
+                font-size: 0.8rem;
+            }
+            
+            .stats-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .notification-achievement {
+                right: 1rem;
+                left: 1rem;
+                transform: translateY(-100px);
+            }
+            
+            .notification-achievement.show {
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top" style="background: rgba(0,0,0,0.8); backdrop-filter: blur(10px);">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="../../index.html">
+                <img src="../../img/logo_math-advantatge.png" alt="Math Advantage" height="40" class="me-2">
+                <span>Gamificació</span>
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="../../portal/welcome.php">
+                            <i class="fas fa-home me-2"></i>Portal
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#achievements">
+                            <i class="fas fa-trophy me-2"></i>Logros
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#leaderboard">
+                            <i class="fas fa-chart-line me-2"></i>Ranking
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Perfil del Estudiante -->
+            <div class="col-lg-4">
+                <div class="profile-card">
+                    <div class="avatar-container">
+                        <div class="avatar">
+                            <i class="fas fa-user-graduate"></i>
+                        </div>
+                        <div class="level-badge" id="user-level">15</div>
+                    </div>
+                    
+                    <h4 id="user-name">Anna García</h4>
+                    <p class="mb-3">Matemàtica Avançada</p>
+                    
+                    <!-- Barra de Experiencia -->
+                    <div class="progress-ring">
+                        <svg>
+                            <circle class="background" cx="60" cy="60" r="52"></circle>
+                            <circle class="progress" cx="60" cy="60" r="52" 
+                                    stroke-dasharray="0 327" 
+                                    id="progress-circle"></circle>
+                        </svg>
+                        <div class="progress-text">
+                            <div class="progress-percentage" id="xp-percentage">75%</div>
+                            <div class="progress-label">Nivell 16</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Estadísticas -->
+                    <div class="stats-container">
+                        <div class="stat-item">
+                            <div class="stat-number" id="total-points">12,450</div>
+                            <div class="stat-label">Punts Totals</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number" id="current-streak">7</div>
+                            <div class="stat-label">Dies Consecutius</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number" id="achievements-count">15</div>
+                            <div class="stat-label">Logros</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number" id="ranking-position">#3</div>
+                            <div class="stat-label">Ranking</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contenido Principal -->
+            <div class="col-lg-8">
+                <!-- Pestañas de Navegación -->
+                <ul class="nav nav-pills justify-content-center mb-4" id="pills-tab" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="pills-achievements-tab" data-bs-toggle="pill" 
+                                data-bs-target="#pills-achievements" type="button" role="tab">
+                            <i class="fas fa-trophy me-2"></i>Els Meus Logros
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="pills-available-tab" data-bs-toggle="pill" 
+                                data-bs-target="#pills-available" type="button" role="tab">
+                            <i class="fas fa-target me-2"></i>Disponibles
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="pills-leaderboard-tab" data-bs-toggle="pill" 
+                                data-bs-target="#pills-leaderboard" type="button" role="tab">
+                            <i class="fas fa-chart-line me-2"></i>Ranking
+                        </button>
+                    </li>
+                </ul>
+
+                <div class="tab-content" id="pills-tabContent">
+                    <!-- Logros Desbloqueados -->
+                    <div class="tab-pane fade show active" id="pills-achievements" role="tabpanel">
+                        <div id="unlocked-achievements">
+                            <div class="achievement-card unlocked">
+                                <div class="d-flex align-items-center">
+                                    <div class="achievement-icon rarity-epico">
+                                        <i class="fas fa-star"></i>
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        <h5 class="mb-1">Perfectionist</h5>
+                                        <p class="text-muted mb-1">Obtén 100% en un examen</p>
+                                        <small class="text-success">
+                                            <i class="fas fa-check-circle me-1"></i>
+                                            Desbloquejat el 15 d'octubre, 2024
+                                        </small>
+                                    </div>
+                                    <div class="text-end">
+                                        <div class="fw-bold text-warning">+100 XP</div>
+                                        <small class="badge bg-purple">Èpic</small>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="achievement-card unlocked">
+                                <div class="d-flex align-items-center">
+                                    <div class="achievement-icon rarity-raro">
+                                        <i class="fas fa-fire"></i>
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        <h5 class="mb-1">Racha de Fuego</h5>
+                                        <p class="text-muted mb-1">Mantén una racha de 7 dies consecutius</p>
+                                        <small class="text-success">
+                                            <i class="fas fa-check-circle me-1"></i>
+                                            Desbloquejat el 10 d'octubre, 2024
+                                        </small>
+                                    </div>
+                                    <div class="text-end">
+                                        <div class="fw-bold text-warning">+75 XP</div>
+                                        <small class="badge bg-primary">Rar</small>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="achievement-card unlocked">
+                                <div class="d-flex align-items-center">
+                                    <div class="achievement-icon rarity-comun">
+                                        <i class="fas fa-graduation-cap"></i>
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        <h5 class="mb-1">Estudiant Dedicat</h5>
+                                        <p class="text-muted mb-1">Completa 10 tasques</p>
+                                        <small class="text-success">
+                                            <i class="fas fa-check-circle me-1"></i>
+                                            Desbloquejat el 5 d'octubre, 2024
+                                        </small>
+                                    </div>
+                                    <div class="text-end">
+                                        <div class="fw-bold text-warning">+50 XP</div>
+                                        <small class="badge bg-secondary">Comú</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Logros Disponibles -->
+                    <div class="tab-pane fade" id="pills-available" role="tabpanel">
+                        <div id="available-achievements">
+                            <div class="achievement-card locked">
+                                <div class="d-flex align-items-center">
+                                    <div class="achievement-icon rarity-legendario">
+                                        <i class="fas fa-trophy"></i>
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        <h5 class="mb-1">Llegenda Matemàtica</h5>
+                                        <p class="text-muted mb-1">Completa 100 tasques amb més de 90%</p>
+                                        <div class="progress mt-2" style="height: 6px;">
+                                            <div class="progress-bar bg-warning" style="width: 65%"></div>
+                                        </div>
+                                        <small class="text-muted">Progrés: 65/100 tasques excel·lents</small>
+                                    </div>
+                                    <div class="text-end">
+                                        <div class="fw-bold text-warning">+500 XP</div>
+                                        <small class="badge bg-warning">Llegendari</small>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="achievement-card locked">
+                                <div class="d-flex align-items-center">
+                                    <div class="achievement-icon rarity-epico">
+                                        <i class="fas fa-clock"></i>
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        <h5 class="mb-1">Mestre del Temps</h5>
+                                        <p class="text-muted mb-1">Completa una tasca abans de temps</p>
+                                        <small class="text-muted">Entrega una tasca amb més d'1 dia d'anticipació</small>
+                                    </div>
+                                    <div class="text-end">
+                                        <div class="fw-bold text-warning">+25 XP</div>
+                                        <small class="badge bg-purple">Èpic</small>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="achievement-card locked">
+                                <div class="d-flex align-items-center">
+                                    <div class="achievement-icon rarity-raro">
+                                        <i class="fas fa-users"></i>
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        <h5 class="mb-1">Col·laborador</h5>
+                                        <p class="text-muted mb-1">Participa en 5 discussions del fòrum</p>
+                                        <div class="progress mt-2" style="height: 6px;">
+                                            <div class="progress-bar bg-info" style="width: 40%"></div>
+                                        </div>
+                                        <small class="text-muted">Progrés: 2/5 discussions</small>
+                                    </div>
+                                    <div class="text-end">
+                                        <div class="fw-bold text-warning">+30 XP</div>
+                                        <small class="badge bg-primary">Rar</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Ranking -->
+                    <div class="tab-pane fade" id="pills-leaderboard" role="tabpanel">
+                        <div class="leaderboard-card">
+                            <h5 class="mb-4">
+                                <i class="fas fa-trophy me-2 text-warning"></i>
+                                Classificació General
+                            </h5>
+
+                            <div class="leaderboard-item">
+                                <div class="rank-badge rank-1">1</div>
+                                <div class="flex-grow-1">
+                                    <div class="fw-semibold">Marc López</div>
+                                    <small class="text-muted">Nivell 18 • Matemàtiques Avançades</small>
+                                </div>
+                                <div class="text-end">
+                                    <div class="fw-bold">15,240 pts</div>
+                                    <small class="text-success">↑ +120 avui</small>
+                                </div>
+                            </div>
+
+                            <div class="leaderboard-item">
+                                <div class="rank-badge rank-2">2</div>
+                                <div class="flex-grow-1">
+                                    <div class="fw-semibold">Laura Martín</div>
+                                    <small class="text-muted">Nivell 17 • Física Quàntica</small>
+                                </div>
+                                <div class="text-end">
+                                    <div class="fw-bold">13,890 pts</div>
+                                    <small class="text-info">→ +50 avui</small>
+                                </div>
+                            </div>
+
+                            <div class="leaderboard-item me">
+                                <div class="rank-badge rank-3">3</div>
+                                <div class="flex-grow-1">
+                                    <div class="fw-semibold">Anna García (Tu)</div>
+                                    <small class="opacity-75">Nivell 15 • Matemàtiques Avançades</small>
+                                </div>
+                                <div class="text-end">
+                                    <div class="fw-bold">12,450 pts</div>
+                                    <small class="opacity-75">↑ +85 avui</small>
+                                </div>
+                            </div>
+
+                            <div class="leaderboard-item">
+                                <div class="rank-badge rank-other">4</div>
+                                <div class="flex-grow-1">
+                                    <div class="fw-semibold">David Sánchez</div>
+                                    <small class="text-muted">Nivell 14 • Química Orgànica</small>
+                                </div>
+                                <div class="text-end">
+                                    <div class="fw-bold">11,280 pts</div>
+                                    <small class="text-danger">↓ -20 avui</small>
+                                </div>
+                            </div>
+
+                            <div class="leaderboard-item">
+                                <div class="rank-badge rank-other">5</div>
+                                <div class="flex-grow-1">
+                                    <div class="fw-semibold">Sofia Rodríguez</div>
+                                    <small class="text-muted">Nivell 13 • Àlgebra Lineal</small>
+                                </div>
+                                <div class="text-end">
+                                    <div class="fw-bold">10,950 pts</div>
+                                    <small class="text-success">↑ +95 avui</small>
+                                </div>
+                            </div>
+
+                            <div class="text-center mt-4">
+                                <button class="btn btn-outline-primary">
+                                    <i class="fas fa-eye me-2"></i>Veure Classificació Completa
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notificación de Logro -->
+    <div class="notification-achievement" id="achievement-notification">
+        <div class="d-flex align-items-center">
+            <div class="achievement-icon rarity-epico me-3">
+                <i class="fas fa-trophy"></i>
+            </div>
+            <div>
+                <div class="fw-bold">Nou Logro Desbloquejat!</div>
+                <small id="achievement-name">Perfectionist</small>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Simular datos del usuario
+        const userData = {
+            name: "Anna García",
+            level: 15,
+            xp: 2340,
+            xpNextLevel: 3100,
+            totalPoints: 12450,
+            currentStreak: 7,
+            achievementsCount: 15,
+            ranking: 3
+        };
+        
+        // Inicializar interfaz
+        document.addEventListener('DOMContentLoaded', function() {
+            updateUserInterface();
+            animateProgressRing();
+        });
+        
+        // Actualizar interfaz de usuario
+        function updateUserInterface() {
+            document.getElementById('user-name').textContent = userData.name;
+            document.getElementById('user-level').textContent = userData.level;
+            document.getElementById('total-points').textContent = userData.totalPoints.toLocaleString();
+            document.getElementById('current-streak').textContent = userData.currentStreak;
+            document.getElementById('achievements-count').textContent = userData.achievementsCount;
+            document.getElementById('ranking-position').textContent = '#' + userData.ranking;
+            
+            // Calcular porcentaje de experiencia
+            const xpPercentage = ((userData.xp - getXpForLevel(userData.level)) / 
+                                 (userData.xpNextLevel - getXpForLevel(userData.level))) * 100;
+            document.getElementById('xp-percentage').textContent = Math.round(xpPercentage) + '%';
+        }
+        
+        // Animar anillo de progreso
+        function animateProgressRing() {
+            const circle = document.getElementById('progress-circle');
+            const radius = 52;
+            const circumference = 2 * Math.PI * radius;
+            
+            const xpPercentage = ((userData.xp - getXpForLevel(userData.level)) / 
+                                 (userData.xpNextLevel - getXpForLevel(userData.level))) * 100;
+            
+            const strokeDasharray = (xpPercentage / 100) * circumference;
+            circle.style.strokeDasharray = `${strokeDasharray} ${circumference}`;
+            
+            // Animar con delay
+            setTimeout(() => {
+                circle.style.transition = 'stroke-dasharray 2s ease-in-out';
+            }, 500);
+        }
+        
+        // Calcular XP necesaria para un nivel
+        function getXpForLevel(level) {
+            return Math.pow(level - 1, 2) * 100;
+        }
+        
+        // Mostrar notificación de logro
+        function showAchievementNotification(achievementName, icon = 'fas fa-trophy') {
+            const notification = document.getElementById('achievement-notification');
+            const nameElement = document.getElementById('achievement-name');
+            const iconElement = notification.querySelector('.achievement-icon i');
+            
+            nameElement.textContent = achievementName;
+            iconElement.className = icon;
+            
+            notification.classList.add('show');
+            
+            // Auto-hide después de 5 segundos
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 5000);
+        }
+        
+        // Simular desbloqueo de logro
+        function simulateAchievement() {
+            showAchievementNotification('Mestre del Temps', 'fas fa-clock');
+            
+            // Actualizar estadísticas
+            userData.totalPoints += 25;
+            userData.xp += 25;
+            userData.achievementsCount++;
+            
+            updateUserInterface();
+            animateProgressRing();
+            
+            // Agregar logro a la lista
+            addAchievementToList({
+                name: 'Mestre del Temps',
+                description: 'Completa una tasca abans de temps',
+                icon: 'fas fa-clock',
+                rarity: 'raro',
+                points: 25,
+                date: new Date().toLocaleDateString('ca-ES')
+            });
+        }
+        
+        // Agregar logro a la lista
+        function addAchievementToList(achievement) {
+            const container = document.getElementById('unlocked-achievements');
+            const achievementHTML = `
+                <div class="achievement-card unlocked" style="opacity: 0; transform: translateY(20px);">
+                    <div class="d-flex align-items-center">
+                        <div class="achievement-icon rarity-${achievement.rarity}">
+                            <i class="${achievement.icon}"></i>
+                        </div>
+                        <div class="flex-grow-1">
+                            <h5 class="mb-1">${achievement.name}</h5>
+                            <p class="text-muted mb-1">${achievement.description}</p>
+                            <small class="text-success">
+                                <i class="fas fa-check-circle me-1"></i>
+                                Desbloquejat el ${achievement.date}
+                            </small>
+                        </div>
+                        <div class="text-end">
+                            <div class="fw-bold text-warning">+${achievement.points} XP</div>
+                            <small class="badge bg-primary">Nou!</small>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            container.insertAdjacentHTML('afterbegin', achievementHTML);
+            
+            // Animar entrada
+            setTimeout(() => {
+                const newCard = container.firstElementChild;
+                newCard.style.transition = 'all 0.5s ease';
+                newCard.style.opacity = '1';
+                newCard.style.transform = 'translateY(0)';
+            }, 100);
+        }
+        
+        // Event listeners para tabs
+        document.addEventListener('shown.bs.tab', function (e) {
+            if (e.target.id === 'pills-leaderboard-tab') {
+                // Cargar datos del leaderboard si es necesario
+                loadLeaderboardData();
+            }
+        });
+        
+        // Cargar datos del leaderboard
+        function loadLeaderboardData() {
+            // Aquí iría la llamada AJAX para cargar datos reales
+            console.log('Cargando datos del leaderboard...');
+        }
+        
+        // Función para testing - simular logro
+        setTimeout(() => {
+            console.log('Usa simulateAchievement() para probar las notificaciones');
+        }, 2000);
+        
+        // Efectos de hover para cards de logros
+        document.querySelectorAll('.achievement-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                if (!this.classList.contains('locked')) {
+                    this.style.transform = 'translateY(-5px)';
+                    this.style.boxShadow = '0 8px 30px rgba(0,0,0,0.15)';
+                }
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                if (!this.classList.contains('locked')) {
+                    this.style.transform = 'translateY(0)';
+                    this.style.boxShadow = '0 4px 20px rgba(0,0,0,0.1)';
+                }
+            });
+        });
+        
+        // Actualización en tiempo real (simulada)
+        setInterval(() => {
+            // Simular pequeños cambios en estadísticas
+            if (Math.random() < 0.1) { // 10% probabilidad cada segundo
+                userData.totalPoints += Math.floor(Math.random() * 5) + 1;
+                document.getElementById('total-points').textContent = userData.totalPoints.toLocaleString();
+            }
+        }, 1000);
+    </script>
+</body>
+</html>

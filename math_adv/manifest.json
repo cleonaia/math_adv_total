@@ -1,0 +1,87 @@
+{
+  "name": "Math Advantage - Plataforma Educativa",
+  "short_name": "Math Advantage",
+  "description": "Plataforma educativa completa per matemàtiques amb sistema de notificacions push",
+  "start_url": "/portal/welcome.php",
+  "display": "standalone",
+  "background_color": "#8b5cf6",
+  "theme_color": "#8b5cf6",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "lang": "ca-ES",
+  "dir": "ltr",
+  "icons": [
+    {
+      "src": "/img/logo_math-advantatge.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/img/logo_math-advantatge.png",
+      "sizes": "512x512", 
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Portal d'Estudiants",
+      "short_name": "Estudiants",
+      "description": "Accés ràpid al portal d'estudiants",
+      "url": "/portal/student/dashboard.php",
+      "icons": [
+        {
+          "src": "/img/logo_math-advantatge.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "Portal de Professors",
+      "short_name": "Professors", 
+      "description": "Accés ràpid al portal de professors",
+      "url": "/portal/teacher/dashboard.php",
+      "icons": [
+        {
+          "src": "/img/logo_math-advantatge.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "Notificacions",
+      "short_name": "Notifs",
+      "description": "Veure notificacions push",
+      "url": "/fase4/notificaciones/notificaciones.html",
+      "icons": [
+        {
+          "src": "/img/logo_math-advantatge.png",
+          "sizes": "96x96"
+        }
+      ]
+    }
+  ],
+  "categories": ["education", "productivity", "utilities"],
+  "screenshots": [
+    {
+      "src": "/img/screenshot-desktop.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide"
+    },
+    {
+      "src": "/img/screenshot-mobile.png", 
+      "sizes": "750x1334",
+      "type": "image/png",
+      "form_factor": "narrow"
+    }
+  ],
+  "related_applications": [
+    {
+      "platform": "web",
+      "url": "https://math-advantage.com"
+    }
+  ],
+  "prefer_related_applications": false
+}

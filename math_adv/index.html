@@ -1,0 +1,1321 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Math Advantage - Centre d'Estudis de Matemàtiques</title>
+    
+    <!-- Performance Optimizations -->
+    <link rel="dns-prefetch" href="//cdn.jsdelivr.net">
+    <link rel="dns-prefetch" href="//cdnjs.cloudflare.com">
+    <link rel="dns-prefetch" href="//fonts.googleapis.com">
+    <link rel="dns-prefetch" href="//fonts.gstatic.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    <!-- Preload Critical Resources -->
+    <link rel="preload" href="./assets/css/styles.css" as="style">
+    <link rel="preload" href="./assets/js/main.js" as="script">
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" as="style">
+    
+    <!-- Prefetch Important Pages -->
+    <link rel="prefetch" href="./portal/">
+    <link rel="prefetch" href="./fase4/evaluaciones/evaluaciones.html">
+    <link rel="prefetch" href="./fase4/chat/chat.html">
+    <meta name="description" content="Math Advantage - Centre d'estudis especialitzat en matemàtiques per a tots els nivells. Classes presencials i online amb professors experts.">
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/styles.css">
+    
+    <!-- PWA Support -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#8b5cf6">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="/img/logo_math-advantatge.png">
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top bg-white shadow-sm">
+        <div class="container">
+            <a class="navbar-brand fw-bold text-primary d-flex align-items-center" href="#home">
+                <img src="img/logo_math-advantatge.png" alt="Math Advantage Logo" style="height: 45px; width: auto;">
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#home">Inici</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#cursos">Cursos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#metodologia">Metodologia</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#erasmus">Erasmus+</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#equip">Equip</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            Portal Digital
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#" onclick="openStudentPortal()"><i class="fas fa-user-graduate me-2"></i>Portal Alumnes</a></li>
+                            <li><a class="dropdown-item" href="#" onclick="openFamilyPortal()"><i class="fas fa-users me-2"></i>Portal Famílies</a></li>
+                            <li><a class="dropdown-item" href="#" onclick="openTeacherPortal()"><i class="fas fa-chalkboard-teacher me-2"></i>Portal Docents</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#" onclick="openAdminPortal()"><i class="fas fa-cogs me-2"></i>Administració</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#funcionalitats">Funcionalitats</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#contacte">Contacte</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link btn btn-primary text-white px-3 ms-2" href="#inscripcio">Inscriu-te</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <section id="home" class="hero-section">
+        <div class="math-symbols math-symbol-1">∑</div>
+        <div class="math-symbols math-symbol-2">∫</div>
+        <div class="math-symbols math-symbol-3">π</div>
+        <div class="math-symbols math-symbol-4">∞</div>
+        <div class="math-symbols math-symbol-5">∂</div>
+        <div class="math-symbols math-symbol-6">Δ</div>
+        <div class="math-symbols math-symbol-7">α</div>
+        <div class="math-symbols math-symbol-8">β</div>
+        <div class="math-symbols math-symbol-9">θ</div>
+        <div class="math-symbols math-symbol-10">x²</div>
+        <div class="math-symbols math-symbol-11">√</div>
+        <div class="math-symbols math-symbol-12">≤</div>
+        
+        <div class="container">
+            <div class="row align-items-center min-vh-100 pt-5">
+                <div class="col-lg-6">
+                    <h1 class="display-4 fw-bold mb-4">
+                        Descobreix l'<span class="text-primary">Univers Científic</span> 
+                        <br>de les <span style="background: var(--gradient-science); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;">Matemàtiques</span>
+                    </h1>
+                    <p class="lead mb-4">
+                        <strong>Som un centre diferent</strong> que va més enllà d'una acadèmia de matemàtiques convencional. 
+                        Oferim eines als nostres alumnes per desenvolupar les seves aptituds i perquè les matemàtiques 
+                        els siguin útils dins i fora de l'escola.
+                        <br><em><strong>Erasmus+ Partner des de 2016</strong> - Excel·lència educativa reconeguda europament.</em>
+                    </p>
+                    <div class="d-flex flex-wrap gap-3">
+                        <a href="#inscripcio" class="btn btn-primary btn-lg">Inscriu-te Ara</a>
+                        <a href="#cursos" class="btn btn-outline-primary btn-lg">Veure Cursos</a>
+                    </div>
+                    
+
+                    <div class="row mt-5 scientific-stats">
+                        <div class="col-4">
+                            <div class="stat-item">
+                                <h3 class="fw-bold text-primary">15+</h3>
+                                <p class="text-muted">Anys d'Experiència</p>
+                                <small class="formula">Des de 2009</small>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="stat-item">
+                                <h3 class="fw-bold" style="color: var(--physics-blue);">500+</h3>
+                                <p class="text-muted">Alumnes Formats</p>
+                                <small class="formula">Tots els nivells</small>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="stat-item">
+                                <h3 class="fw-bold" style="color: var(--chemistry-green);">EU</h3>
+                                <p class="text-muted">Erasmus+ Partner</p>
+                                <small class="formula">Des de 2016</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-6">
+                    <div class="hero-image-container position-relative">
+                        <div class="mathematical-visualization">
+                            <div class="formula-display">
+                                <div class="formula-line">f(x) = ax² + bx + c</div>
+                                <div class="formula-line">∫ x dx = x²/2 + C</div>
+                                <div class="formula-line">lim[x→∞] f(x)</div>
+                                <div class="formula-line">E = mc²</div>
+                                <div class="formula-line">πr² = A</div>
+                            </div>
+                            
+                            <div class="graph-visualization">
+                                <svg width="300" height="200" class="math-graph">
+                                    <defs>
+                                        <linearGradient id="graphGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                            <stop offset="0%" style="stop-color:var(--primary-color);stop-opacity:0.8" />
+                                            <stop offset="100%" style="stop-color:var(--accent-color);stop-opacity:0.4" />
+                                        </linearGradient>
+                                    </defs>
+                                    <g class="grid">
+                                        <line x1="0" y1="100" x2="300" y2="100" stroke="rgba(139,92,246,0.3)" stroke-width="1"/>
+                                        <line x1="150" y1="0" x2="150" y2="200" stroke="rgba(139,92,246,0.3)" stroke-width="1"/>
+                                    </g>
+                                    <path d="M 50 150 Q 150 50 250 150" stroke="url(#graphGrad)" stroke-width="3" fill="none" class="animated-path"/>
+                                    <circle cx="150" cy="50" r="4" fill="var(--primary-color)" class="pulse-point"/>
+                                    <circle cx="100" cy="100" r="3" fill="var(--accent-color)" class="pulse-point"/>
+                                    <circle cx="200" cy="100" r="3" fill="var(--physics-blue)" class="pulse-point"/>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <section id="cursos" class="py-5 bg-light">
+        <div class="container">
+            <div class="text-center mb-5">
+                <div class="section-header">
+                    <div class="mathematical-decoration">
+                        <span class="math-deco">∑</span>
+                        <span class="math-deco">∫</span>
+                        <span class="math-deco">∂</span>
+                    </div>
+                    <h2 class="display-5 fw-bold">Els Nostres Cursos Científics</h2>
+                    <p class="lead text-muted">Formació especialitzada amb metodologia personalitzada per a cada nivell educatiu</p>
+                    <div class="subtitle-formula">
+                        <em>"Aprenentatge = Talent × Dedicació + Metodologia"</em>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row g-4">
+
+                <div class="col-lg-4 col-md-6">
+                    <div class="card math-card h-100 border-0 shadow-sm course-card position-relative">
+                        <div class="course-math-bg">∑</div>
+                        <div class="card-body p-4">
+                            <div class="feature-icon bg-primary bg-gradient text-white mb-3">
+                                <span style="font-size: 1.5rem; font-weight: bold;">∑</span>
+                            </div>
+                            <h4 class="fw-bold text-primary">ESO - Matemàtiques</h4>
+                            <p class="text-muted">Àlgebra, geometria i aritmètica per a 1r, 2n, 3r i 4t d'ESO. Fonaments sòlids per al futur acadèmic.</p>
+                            <div class="mathematical-formulas mb-3">
+                                <small class="formula-mini">ax + b = 0</small>
+                                <small class="formula-mini">A = πr²</small>
+                                <small class="formula-mini">c² = a² + b²</small>
+                            </div>
+                            <ul class="list-unstyled">
+                                <li><i class="fas fa-calculator text-primary me-2"></i>Àlgebra fonamental</li>
+                                <li><i class="fas fa-shapes text-primary me-2"></i>Geometria euclidiana</li>
+                                <li><i class="fas fa-chart-line text-primary me-2"></i>Funcions i gràfiques</li>
+                                <li><i class="fas fa-percentage text-primary me-2"></i>Estadística bàsica</li>
+                            </ul>
+                            <div class="mt-3">
+                                <span class="badge course-badge">Presencial</span>
+                                <span class="badge course-badge">Online</span>
+                                <span class="badge course-badge">Individual</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+
+                <div class="col-lg-4 col-md-6">
+                    <div class="card physics-card h-100 border-0 shadow-sm course-card position-relative">
+                        <div class="course-math-bg">∫</div>
+                        <div class="card-body p-4">
+                            <div class="feature-icon bg-gradient text-white mb-3" style="background: var(--gradient-science);">
+                                <span style="font-size: 1.5rem;">∫</span>
+                            </div>
+                            <h4 class="fw-bold" style="color: var(--physics-blue);">Batxillerat - Matemàtiques</h4>
+                            <p class="text-muted">Matemàtiques I i II, càlcul diferencial i integral. Preparació Selectivitat Catalunya (PAU).</p>
+                            <div class="mathematical-formulas mb-3">
+                                <small class="formula-mini">∫ f(x)dx</small>
+                                <small class="formula-mini">lim f(x)</small>
+                                <small class="formula-mini">f'(x) = dy/dx</small>
+                            </div>
+                            <ul class="list-unstyled">
+                                <li><i class="fas fa-wave-square text-info me-2"></i>Càlcul diferencial i integral</li>
+                                <li><i class="fas fa-chart-area text-info me-2"></i>Àlgebra lineal avançada</li>
+                                <li><i class="fas fa-graduation-cap text-info me-2"></i>Preparació PAU/Selectivitat</li>
+                                <li><i class="fas fa-rocket text-info me-2"></i>Física i Química aplicada</li>
+                            </ul>
+                            <div class="mt-3">
+                                <span class="badge course-badge-physics">Presencial</span>
+                                <span class="badge course-badge-physics">Online</span>
+                                <span class="badge course-badge-physics">Intensiu PAU</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+
+                <div class="col-lg-4 col-md-6">
+                    <div class="card chemistry-card h-100 border-0 shadow-sm course-card position-relative">
+                        <div class="course-math-bg">∑</div>
+                        <div class="card-body p-4">
+                            <div class="feature-icon text-white mb-3" style="background: linear-gradient(135deg, var(--chemistry-green), var(--geometry-gold));">
+                                <i class="fas fa-atom" style="font-size: 1.5rem;"></i>
+                            </div>
+                            <h4 class="fw-bold" style="color: var(--chemistry-green);">Universitari - Càlcul Avançat</h4>
+                            <p class="text-muted">Matemàtiques per Enginyeries, Física, Química. Suport universitats Catalunya (UPC, UAB, UB).</p>
+                            <div class="mathematical-formulas mb-3">
+                                <small class="formula-mini">∇f(x,y,z)</small>
+                                <small class="formula-mini">∬∬ f(x,y)dxdy</small>
+                                <small class="formula-mini">det(A)</small>
+                            </div>
+                            <ul class="list-unstyled">
+                                <li><i class="fas fa-superscript text-success me-2"></i>Càlcul multivariable</li>
+                                <li><i class="fas fa-matrix text-success me-2"></i>Àlgebra lineal aplicada</li>
+                                <li><i class="fas fa-chart-pie text-success me-2"></i>Estadística avançada</li>
+                                <li><i class="fas fa-flask text-success me-2"></i>Matemàtiques per Química</li>
+                            </ul>
+                            <div class="mt-3">
+                                <span class="badge course-badge-chemistry">Presencial</span>
+                                <span class="badge course-badge-chemistry">Online</span>
+                                <span class="badge course-badge-chemistry">Intensiu</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <section id="metodologia" class="py-5">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <div class="methodology-header">
+                        <div class="geometric-decoration">
+                            <div class="triangle"></div>
+                            <div class="circle"></div>
+                            <div class="square"></div>
+                        </div>
+                        <h2 class="display-5 fw-bold mb-4">
+                            <span class="text-primary">Metodologia</span> Científica
+                        </h2>
+                    </div>
+                    <p class="lead text-muted mb-4">
+                        El nostre és un <strong>mètode personalitzat per a cada alumne/a</strong>. 
+                        En la nostra acadèmia de matemàtiques, es rep un <strong>tractament individualitzat</strong> 
+                        per tal de detectar tant dificultats com aptituds amb l'objectiu de superar-les 
+                        i millorar-les a través d'un pla d'estudis fet a mida.
+                    </p>
+                    
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <div class="d-flex methodology-step">
+                                <div class="feature-icon bg-gradient text-white me-3" style="background: var(--gradient-primary);">
+                                    <span style="font-size: 1.2rem; font-weight: bold;">π</span>
+                                </div>
+                                <div>
+                                    <h5 class="fw-bold" style="color: var(--primary-color);">Anàlisi Matemàtica</h5>
+                                    <p class="text-muted small">Avaluació precisa del nivell mitjançant algorismes diagnòstics.</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="d-flex methodology-step">
+                                <div class="feature-icon bg-gradient text-white me-3" style="background: var(--gradient-primary);">
+                                    <i class="fas fa-atom"></i>
+                                </div>
+                                <div>
+                                    <h5 class="fw-bold" style="color: var(--primary-color);">Física Aplicada</h5>
+                                    <p class="text-muted small">Resolució de problemes amb mètodes experimentals comprovats.</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="d-flex methodology-step">
+                                <div class="feature-icon bg-gradient text-white me-3" style="background: var(--gradient-primary);">
+                                    <i class="fas fa-flask"></i>
+                                </div>
+                                <div>
+                                    <h5 class="fw-bold" style="color: var(--primary-color);">Síntesi Química</h5>
+                                    <p class="text-muted small">Combinació òptima d'elements pedagògics per resultats excel·lents.</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="d-flex methodology-step">
+                                <div class="feature-icon bg-gradient text-white me-3" style="background: var(--gradient-primary);">
+                                    <span style="font-size: 1.2rem; font-weight: bold;">∞</span>
+                                </div>
+                                <div>
+                                    <h5 class="fw-bold" style="color: var(--primary-color);">Optimització Contínua</h5>
+                                    <p class="text-muted small">Millora constant mitjançant retroalimentació i anàlisi de dades.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-6">
+                    <div class="methodology-visual">
+                        <div class="text-center mb-4">
+                            <div class="academy-logo-display">
+                                <img src="img/logo_math-advantatge.png" alt="Math Advantage" class="img-fluid" style="max-height: 100px;">
+                                <h4 class="fw-bold mt-3 text-primary">Excel·lència Educativa</h4>
+                                <p class="text-muted">Des de 2008, formant el futur científic</p>
+                            </div>
+                        </div>
+                        
+                        <div class="achievements-grid">
+                            <div class="row g-3">
+                                <div class="col-6">
+                                    <div class="achievement-card text-center p-3">
+                                        <div class="achievement-icon mb-2">
+                                            <i class="fas fa-graduation-cap text-primary fs-2"></i>
+                                        </div>
+                                        <h5 class="fw-bold text-dark">500+</h5>
+                                        <p class="small text-muted mb-0">Alumnes formats</p>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="achievement-card text-center p-3">
+                                        <div class="achievement-icon mb-2">
+                                            <i class="fas fa-star text-warning fs-2"></i>
+                                        </div>
+                                        <h5 class="fw-bold text-dark">100%</h5>
+                                        <p class="small text-muted mb-0">Èxit acadèmic</p>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="achievement-card text-center p-3">
+                                        <div class="achievement-icon mb-2">
+                                            <i class="fas fa-globe-europe text-success fs-2"></i>
+                                        </div>
+                                        <h5 class="fw-bold text-dark">Erasmus+</h5>
+                                        <p class="small text-muted mb-0">Partner oficial</p>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="achievement-card text-center p-3">
+                                        <div class="achievement-icon mb-2">
+                                            <i class="fas fa-trophy text-primary fs-2"></i>
+                                        </div>
+                                        <h5 class="fw-bold text-dark">15+</h5>
+                                        <p class="small text-muted mb-0">Anys d'experiència</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Erasmus+ Section -->
+    <section id="erasmus" class="py-5 erasmus-section">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <div class="text-center mb-4">
+                        <div class="erasmus-icon neon-glow">
+                            <i class="fas fa-globe-europe"></i>
+                        </div>
+                        <div class="european-stars">★</div>
+                    </div>
+                    <h2 class="display-5 fw-bold text-center mb-4">
+                        <span class="text-primary">Erasmus+</span> Partner
+                    </h2>
+                    <div class="glass-card p-4">
+                        <p class="lead text-center mb-4">
+                            <strong>Des de 2016</strong> treballem amb el programa Erasmus+: 
+                            portem a terme projectes de mobilitat educativa per estudiants i personal educatiu.
+                        </p>
+                        
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <div class="d-flex align-items-center mb-3">
+                                    <div class="feature-icon bg-primary bg-gradient text-white me-3">
+                                        <i class="fas fa-passport"></i>
+                                    </div>
+                                    <div>
+                                        <h6 class="fw-bold mb-1">Mobilitat Internacional</h6>
+                                        <small class="text-muted">Intercanvi amb centres europeus</small>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <div class="d-flex align-items-center mb-3">
+                                    <div class="feature-icon bg-success bg-gradient text-white me-3">
+                                        <i class="fas fa-graduation-cap"></i>
+                                    </div>
+                                    <div>
+                                        <h6 class="fw-bold mb-1">Formació del Professorat</h6>
+                                        <small class="text-muted">Actualització metodològica europea</small>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <div class="d-flex align-items-center mb-3">
+                                    <div class="feature-icon bg-info bg-gradient text-white me-3">
+                                        <i class="fas fa-users"></i>
+                                    </div>
+                                    <div>
+                                        <h6 class="fw-bold mb-1">Projectes Col·laboratius</h6>
+                                        <small class="text-muted">Recerca educativa conjunta</small>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <div class="d-flex align-items-center mb-3">
+                                    <div class="feature-icon bg-warning bg-gradient text-white me-3">
+                                        <i class="fas fa-certificate"></i>
+                                    </div>
+                                    <div>
+                                        <h6 class="fw-bold mb-1">Certificació Europea</h6>
+                                        <small class="text-muted">Qualitat reconeguda internacionalment</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="text-center mt-4">
+                            <span class="badge" style="background: linear-gradient(135deg, var(--geometry-gold), var(--primary-color)); color: white; font-size: 0.9rem; padding: 0.7rem 1.5rem;">
+                                <i class="fas fa-star me-2"></i>Erasmus+ Quality Certified
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-6">
+                    <div class="position-relative">
+                        <div class="erasmus-image-container">
+                            <img src="img/erasmus_fotobulg.jpg" alt="Projecte Erasmus+ Bulgaria 2023" class="img-fluid rounded-4 shadow-lg">
+                            
+
+                            <div class="erasmus-project-info">
+                                <div class="project-badge">
+                                    <i class="fas fa-star text-warning me-2"></i>
+                                    <strong>Projecte Erasmus+ 2023</strong>
+                                </div>
+                                <p class="project-description">
+                                    amb Institut Ángel Popov de Veliko Tarnovo, Bulgaria
+                                </p>
+                            </div>
+                            
+                            <div class="molecular-structure position-absolute" style="top: 20px; left: 20px;">
+                                <div class="molecule" style="top: 0; left: 0;"></div>
+                                <div class="molecule" style="top: 10px; left: 15px;"></div>
+                                <div class="molecule" style="top: 20px; left: 5px;"></div>
+                            </div>
+                            <div class="dna-helix">
+                                <div class="dna-strand"></div>
+                                <div class="dna-strand"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+
+        <div class="scientific-particle" style="top: 10%; left: 5%;"></div>
+        <div class="scientific-particle" style="top: 30%; right: 10%; animation-delay: 2s;"></div>
+        <div class="scientific-particle" style="bottom: 20%; left: 15%; animation-delay: 4s;"></div>
+        <div class="scientific-particle" style="bottom: 10%; right: 20%; animation-delay: 6s;"></div>
+    </section>
+
+    <!-- Funcionalitats Section -->
+    <section id="funcionalitats" class="py-5 bg-light">
+        <div class="container">
+            <div class="text-center mb-5">
+                <div class="section-header">
+                    <div class="mathematical-decoration">
+                        <span class="math-deco">∑</span>
+                        <span class="math-deco">∫</span>
+                        <span class="math-deco">∂</span>
+                    </div>
+                    <h2 class="display-5 fw-bold">Funcionalitats Avançades</h2>
+                    <p class="lead text-muted">Eines digitals i metodologies innovadores per optimitzar l'experiència educativa</p>
+                </div>
+            </div>
+            
+            <div class="row g-4">
+
+                <div class="col-lg-3 col-md-6">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body text-center p-4">
+                            <div class="mb-3">
+                                <i class="fas fa-chart-line fa-3x" style="color: var(--primary-color);"></i>
+                            </div>
+                            <h5 class="fw-bold mb-3" style="color: var(--primary-color);">Analítica Avançada</h5>
+                            <p class="text-muted small">Seguiment detallat del progrés dels estudiants amb mètriques personalitzades i informes automàtics.</p>
+                        </div>
+                    </div>
+                </div>
+                
+
+                <div class="col-lg-3 col-md-6">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body text-center p-4">
+                            <div class="mb-3">
+                                <i class="fas fa-laptop fa-3x" style="color: var(--primary-color);"></i>
+                            </div>
+                            <h5 class="fw-bold mb-3" style="color: var(--primary-color);">Portal Interactiu</h5>
+                            <p class="text-muted small">Plataforma digital integrada per estudiants, famílies i professors amb accés 24/7.</p>
+                        </div>
+                    </div>
+                </div>
+                
+
+                <div class="col-lg-3 col-md-6">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body text-center p-4">
+                            <div class="mb-3">
+                                <i class="fas fa-gamepad fa-3x" style="color: var(--primary-color);"></i>
+                            </div>
+                            <h5 class="fw-bold mb-3" style="color: var(--primary-color);">Gamificació</h5>
+                            <p class="text-muted small">Convertim l'aprenentatge en una experiència divertida amb recompenses i reptes personalitzats.</p>
+                        </div>
+                    </div>
+                </div>
+                
+
+                <div class="col-lg-3 col-md-6">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body text-center p-4">
+                            <div class="mb-3">
+                                <i class="fas fa-brain fa-3x" style="color: var(--primary-color);"></i>
+                            </div>
+                            <h5 class="fw-bold mb-3" style="color: var(--primary-color);">IA Personalitzada</h5>
+                            <p class="text-muted small">Intel·ligència artificial que adapta el contingut i els exercicis al ritme de cada estudiant.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <section id="digital-management" class="py-5">
+        <div class="container">
+            <div class="text-center mb-5">
+                <div class="section-header">
+                    <div class="mathematical-decoration">
+                        <span class="math-deco">⚙️</span>
+                        <span class="math-deco">📊</span>
+                        <span class="math-deco">🌐</span>
+                    </div>
+                    <h2 class="display-5 fw-bold">Gestió Digital Intel·ligent</h2>
+                    <p class="lead text-muted">Automatització completa per estalviar temps i millorar l'experiència educativa</p>
+                </div>
+            </div>
+            
+            <div class="row g-4 mb-5">
+                <div class="col-lg-4">
+                    <div class="card digital-card h-100 border-0 shadow-lg">
+                        <div class="card-body p-4 text-center">
+                            <div class="digital-icon mb-3">
+                                <i class="fas fa-robot"></i>
+                            </div>
+                            <h4 class="fw-bold text-primary">Automatització d'Inscripcions</h4>
+                            <p class="text-muted mb-4">Sistema intel·ligent que gestiona inscripcions, reserves i confirmacions automàtiques.</p>
+                            <ul class="list-unstyled text-start">
+                                <li><i class="fas fa-check text-success me-2"></i>Inscripcions online 24/7</li>
+                                <li><i class="fas fa-check text-success me-2"></i>Confirmacions automàtiques</li>
+                                <li><i class="fas fa-check text-success me-2"></i>Gestió de llistes d'espera</li>
+                                <li><i class="fas fa-check text-success me-2"></i>Recordatoris per email/SMS</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4">
+                    <div class="card digital-card h-100 border-0 shadow-lg">
+                        <div class="card-body p-4 text-center">
+                            <div class="digital-icon mb-3">
+                                <i class="fas fa-calendar-alt"></i>
+                            </div>
+                            <h4 class="fw-bold text-info">Agenda Digital Integrada</h4>
+                            <p class="text-muted mb-4">Calendari intel·ligent per classes, tutories i esdeveniments especials.</p>
+                            <ul class="list-unstyled text-start">
+                                <li><i class="fas fa-check text-success me-2"></i>Calendari sincronitzat</li>
+                                <li><i class="fas fa-check text-success me-2"></i>Reserves de tutories</li>
+                                <li><i class="fas fa-check text-success me-2"></i>Gestió d'aules</li>
+                                <li><i class="fas fa-check text-success me-2"></i>Notificacions de canvis</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4">
+                    <div class="card digital-card h-100 border-0 shadow-lg">
+                        <div class="card-body p-4 text-center">
+                            <div class="digital-icon mb-3">
+                                <i class="fas fa-bell"></i>
+                            </div>
+                            <h4 class="fw-bold text-warning">Comunicació Automàtica</h4>
+                            <p class="text-muted mb-4">Sistema de notificacions personalitzat per a cada família i alumne.</p>
+                            <ul class="list-unstyled text-start">
+                                <li><i class="fas fa-check text-success me-2"></i>WhatsApp Business API</li>
+                                <li><i class="fas fa-check text-success me-2"></i>Emails personalitzats</li>
+                                <li><i class="fas fa-check text-success me-2"></i>Recordatoris de classes</li>
+                                <li><i class="fas fa-check text-success me-2"></i>Avisos d'esdeveniments</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <section id="private-portal" class="py-5 bg-light">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="display-5 fw-bold">Portal Privat Multi-Usuari</h2>
+                <p class="lead text-muted">Accés segur i personalitzat per a cada membre de la comunitat educativa</p>
+            </div>
+            
+            <div class="row g-4">
+
+                <div class="col-lg-6 col-xl-3">
+                    <div class="portal-card student-portal">
+                        <div class="portal-header">
+                            <i class="fas fa-user-graduate"></i>
+                            <h4>Portal Alumnes</h4>
+                        </div>
+                        <div class="portal-body">
+                            <ul class="portal-features">
+                                <li>📚 Materials de classe</li>
+                                <li>📅 Horari personalitzat</li>
+                                <li>📊 Seguiment de progressos</li>
+                                <li>📝 Tasques i deures</li>
+                                <li>🏆 Insignies i achievements</li>
+                                <li>💬 Xat amb professors</li>
+                            </ul>
+                            <button class="btn btn-primary w-100" onclick="openStudentPortal()">
+                                <i class="fas fa-sign-in-alt me-2"></i>Accedir
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+
+                <div class="col-lg-6 col-xl-3">
+                    <div class="portal-card family-portal">
+                        <div class="portal-header">
+                            <i class="fas fa-users"></i>
+                            <h4>Portal Famílies</h4>
+                        </div>
+                        <div class="portal-body">
+                            <ul class="portal-features">
+                                <li>📈 Seguiment acadèmic</li>
+                                <li>📅 Agenda família</li>
+                                <li>💳 Gestió de pagaments</li>
+                                <li>📧 Comunicació directa</li>
+                                <li>📄 Informes de progrés</li>
+                                <li>🔔 Notificacions instantànies</li>
+                            </ul>
+                            <button class="btn btn-success w-100" onclick="openFamilyPortal()">
+                                <i class="fas fa-sign-in-alt me-2"></i>Accedir
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+
+                <div class="col-lg-6 col-xl-3">
+                    <div class="portal-card teacher-portal">
+                        <div class="portal-header">
+                            <i class="fas fa-chalkboard-teacher"></i>
+                            <h4>Portal Docents</h4>
+                        </div>
+                        <div class="portal-body">
+                            <ul class="portal-features">
+                                <li>📚 Gestió de classes</li>
+                                <li>📝 Avaluacions digitals</li>
+                                <li>📅 Planificació currículum</li>
+                                <li>📊 Anàlisi d'alumnes</li>
+                                <li>📧 Comunicació amb famílies</li>
+                                <li>📁 Biblioteca de recursos</li>
+                            </ul>
+                            <button class="btn btn-info w-100" onclick="openTeacherPortal()">
+                                <i class="fas fa-sign-in-alt me-2"></i>Accedir
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+
+                <div class="col-lg-6 col-xl-3">
+                    <div class="portal-card admin-portal">
+                        <div class="portal-header">
+                            <i class="fas fa-cogs"></i>
+                            <h4>Administració</h4>
+                        </div>
+                        <div class="portal-body">
+                            <ul class="portal-features">
+                                <li>📈 Dashboard analític</li>
+                                <li>👥 Gestió d'usuaris</li>
+                                <li>💰 Control financer</li>
+                                <li>📨 Comunicació massiva</li>
+                                <li>📄 Informes i estadístiques</li>
+                                <li>⚙️ Configuració del sistema</li>
+                            </ul>
+                            <button class="btn btn-warning w-100" onclick="openAdminPortal()">
+                                <i class="fas fa-sign-in-alt me-2"></i>Accedir
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+
+
+    <!-- Equip Section -->
+
+    <section id="team" class="py-5">
+        <div class="container">
+            <h2 class="section-title text-center mb-5">El Nostre Equip Docent</h2>
+            <div class="row justify-content-center">
+                <div class="col-md-6 mb-4">
+                    <div class="team-card text-center p-4">
+                        <div class="team-avatar mb-3">
+                            <div class="avatar-circle">
+                                <i class="fas fa-user-tie fa-4x text-primary"></i>
+                            </div>
+                        </div>
+                        <h5>Lucia Emilova</h5>
+                        <p class="text-primary fw-bold">Propietària de l'Acadèmia</p>
+                        <div class="team-description text-start">
+                            <p><strong>Formació:</strong></p>
+                            <ul class="list-unstyled small">
+                                <li>• Llicenciada en Matemàtiques i Informàtica (Universitat de Sofia)</li>
+                                <li>• Diplomada en Economia Internacional</li>
+                                <li>• Certificat d'Aptitud Pedagògica (Universitat de Lleida)</li>
+                            </ul>
+                            <p><strong>Experiència:</strong> Més de 20 anys com a professora de Matemàtiques</p>
+                            <blockquote class="blockquote-sm mt-3">
+                                <em>"La meva principal motivació és que els alumnes perdin la por a les matemàtiques"</em>
+                            </blockquote>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-4">
+                    <div class="team-card text-center p-4">
+                        <div class="team-avatar mb-3">
+                            <div class="avatar-circle">
+                                <i class="fas fa-atom fa-4x text-primary"></i>
+                            </div>
+                        </div>
+                        <h5>Irene Valderrama</h5>
+                        <p class="text-primary fw-bold">Professora de Matemàtiques, Física i Química</p>
+                        <div class="team-description text-start">
+                            <p><strong>Formació:</strong></p>
+                            <ul class="list-unstyled small">
+                                <li>• Graduada en Física (Universitat Autònoma de Barcelona)</li>
+                                <li>• Cursant Màster en Física d'Altes Energies, Astrofísica i Cosmologia</li>
+                            </ul>
+                            <p><strong>Experiència:</strong> Més de 5 anys d'experiència com a professora de ciències per a totes les edats</p>
+                            <blockquote class="blockquote-sm mt-3">
+                                <em>"Si busques resultats diferents, no facis sempre el mateix" - Albert Einstein</em>
+                            </blockquote>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Inscripció Section -->
+    <section id="inscripcio" class="py-5">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="text-center mb-5">
+                        <h2 class="display-5 fw-bold">Inscriu-te Ara</h2>
+                        <p class="lead text-muted">Comença el teu camí cap a l'èxit en matemàtiques</p>
+                    </div>
+                    
+                    <div class="card border-0 shadow-lg">
+                        <div class="card-body p-5">
+                            <form id="inscripcioForm" action="php/inscripcio.php" method="POST">
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label for="nom" class="form-label">Nom complet *</label>
+                                        <input type="text" class="form-control" id="nom" name="nom" required>
+                                    </div>
+                                    
+                                    <div class="col-md-6">
+                                        <label for="email" class="form-label">Email *</label>
+                                        <input type="email" class="form-control" id="email" name="email" required>
+                                    </div>
+                                    
+                                    <div class="col-md-6">
+                                        <label for="telefon" class="form-label">Telèfon *</label>
+                                        <input type="tel" class="form-control" id="telefon" name="telefon" required>
+                                    </div>
+                                    
+                                    <div class="col-md-6">
+                                        <label for="nivell" class="form-label">Nivell d'estudis *</label>
+                                        <select class="form-select" id="nivell" name="nivell" required>
+                                            <option value="">Selecciona un nivell</option>
+                                            <option value="1eso">1r ESO</option>
+                                            <option value="2eso">2n ESO</option>
+                                            <option value="3eso">3r ESO</option>
+                                            <option value="4eso">4t ESO</option>
+                                            <option value="1bat">1r Batxillerat</option>
+                                            <option value="2bat">2n Batxillerat</option>
+                                            <option value="universitari">Universitari</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div class="col-md-6">
+                                        <label for="modalitat" class="form-label">Modalitat preferida *</label>
+                                        <select class="form-select" id="modalitat" name="modalitat" required>
+                                            <option value="">Selecciona modalitat</option>
+                                            <option value="presencial">Presencial</option>
+                                            <option value="online">Online</option>
+                                            <option value="mixta">Mixta</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div class="col-md-6">
+                                        <label for="horari" class="form-label">Horari preferit</label>
+                                        <select class="form-select" id="horari" name="horari">
+                                            <option value="">Selecciona horari</option>
+                                            <option value="mati">Matí (9:00-13:00)</option>
+                                            <option value="tarda">Tarda (16:00-20:00)</option>
+                                            <option value="vespre">Vespre (20:00-22:00)</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div class="col-12">
+                                        <label for="comentaris" class="form-label">Comentaris addicionals</label>
+                                        <textarea class="form-control" id="comentaris" name="comentaris" rows="3" placeholder="Explica'ns les teves necessitats específiques..."></textarea>
+                                    </div>
+                                    
+                                    <div class="col-12">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="politica" name="politica" required>
+                                            <label class="form-check-label" for="politica">
+                                                Accepto la <a href="#" data-bs-toggle="modal" data-bs-target="#politicaModal">política de privacitat</a> *
+                                            </label>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-12">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="newsletter" name="newsletter">
+                                            <label class="form-check-label" for="newsletter">
+                                                Vull rebre informació sobre novetats i ofertes
+                                            </label>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-12 text-center">
+                                        <button type="submit" class="btn btn-primary btn-lg px-5">
+                                            <i class="fas fa-paper-plane me-2"></i>Enviar Sol·licitud
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contacte Section -->
+    <section id="contacte" class="py-5" style="background: linear-gradient(135deg, #f8f9ff 0%, #e8f0fe 100%);">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="display-5 fw-bold mb-3">Contacta amb Nosaltres</h2>
+                <p class="lead text-muted mb-4">Estem aquí per resoldre els teus dubtes i acompanyar-te en el teu camí educatiu</p>
+                <div class="mathematical-separator">
+                    <span class="text-primary fs-4">∑ ∫ π ∆ ∞</span>
+                </div>
+            </div>
+            
+
+            <div class="row g-4 mb-5">
+                <div class="col-lg-4">
+                    <div class="contact-card card border-0 shadow-lg h-100 position-relative overflow-hidden">
+                        <div class="card-body text-center p-4">
+                            <div class="contact-icon-wrapper mb-4">
+                                <div class="contact-icon bg-gradient-primary text-white rounded-circle d-flex align-items-center justify-content-center mx-auto">
+                                    <i class="fas fa-map-marker-alt fa-lg"></i>
+                                </div>
+                            </div>
+                            <h5 class="fw-bold mb-3">Ubicació</h5>
+                            <div class="contact-info">
+                                <p class="text-dark fw-medium mb-1">Pare Sallarès, 67</p>
+                                <p class="text-muted mb-3">08201 Sabadell</p>
+                                <a href="https://maps.google.com/?q=Pare+Sallarès+67+Sabadell" target="_blank" class="btn btn-outline-primary btn-sm rounded-pill">
+                                    <i class="fas fa-external-link-alt me-2"></i>Veure al mapa
+                                </a>
+                            </div>
+                        </div>
+                        <div class="contact-card-bg"></div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4">
+                    <div class="contact-card card border-0 shadow-lg h-100 position-relative overflow-hidden">
+                        <div class="card-body text-center p-4">
+                            <div class="contact-icon-wrapper mb-4">
+                                <div class="contact-icon bg-gradient-success text-white rounded-circle d-flex align-items-center justify-content-center mx-auto">
+                                    <i class="fas fa-phone fa-lg"></i>
+                                </div>
+                            </div>
+                            <h5 class="fw-bold mb-3">Telèfon</h5>
+                            <div class="contact-info">
+                                <a href="tel:931163457" class="contact-link text-dark fw-medium d-block mb-2">
+                                    <i class="fas fa-phone-alt me-2 text-success"></i>931 16 34 57
+                                </a>
+                                <a href="tel:658174783" class="contact-link text-dark fw-medium d-block mb-3">
+                                    <i class="fas fa-mobile-alt me-2 text-success"></i>658 174 783
+                                </a>
+                                <div class="availability-status">
+                                    <span class="badge bg-success rounded-pill">
+                                        <i class="fas fa-circle fa-xs me-1"></i>Disponible ara
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="contact-card-bg"></div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4">
+                    <div class="contact-card card border-0 shadow-lg h-100 position-relative overflow-hidden">
+                        <div class="card-body text-center p-4">
+                            <div class="contact-icon-wrapper mb-4">
+                                <div class="contact-icon bg-gradient-info text-white rounded-circle d-flex align-items-center justify-content-center mx-auto">
+                                    <i class="fas fa-envelope fa-lg"></i>
+                                </div>
+                            </div>
+                            <h5 class="fw-bold mb-3">Email</h5>
+                            <div class="contact-info">
+                                <a href="mailto:info@math-advantage.com" class="contact-link text-dark fw-medium d-block mb-3">
+                                    <i class="fas fa-envelope me-2 text-info"></i>info@math-advantage.com
+                                </a>
+                                <div class="schedule-info">
+                                    <h6 class="fw-bold text-primary mb-2">Horari d'atenció:</h6>
+                                    <div class="schedule-item">
+                                        <i class="fas fa-sun text-warning me-2"></i>
+                                        <span class="fw-medium">Matins:</span> 10:00-13:00h
+                                    </div>
+                                    <div class="schedule-item">
+                                        <i class="fas fa-moon text-primary me-2"></i>
+                                        <span class="fw-medium">Tardes:</span> 16:30-20:30h
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="contact-card-bg"></div>
+                    </div>
+                </div>
+            </div>
+            
+
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="quick-actions-card card border-0 shadow-lg">
+                        <div class="card-body p-4">
+                            <div class="text-center mb-4">
+                                <h5 class="fw-bold">Contacte Ràpid</h5>
+                                <p class="text-muted mb-0">Tria l'opció que més et convingui</p>
+                            </div>
+                            <div class="row g-3">
+                                <div class="col-md-4">
+                                    <a href="tel:931163457" class="btn btn-outline-success w-100 py-3 rounded-3">
+                                        <i class="fas fa-phone fa-lg mb-2 d-block"></i>
+                                        <span class="fw-bold">Trucar Ara</span>
+                                    </a>
+                                </div>
+                                <div class="col-md-4">
+                                    <a href="mailto:info@math-advantage.com" class="btn btn-outline-info w-100 py-3 rounded-3">
+                                        <i class="fas fa-envelope fa-lg mb-2 d-block"></i>
+                                        <span class="fw-bold">Enviar Email</span>
+                                    </a>
+                                </div>
+                                <div class="col-md-4">
+                                    <button class="btn btn-outline-primary w-100 py-3 rounded-3" onclick="toggleChatbot()">
+                                        <i class="fas fa-robot fa-lg mb-2 d-block"></i>
+                                        <span class="fw-bold">Xat IA</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+
+            <div class="row mt-5">
+                <div class="col-12">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body p-0">
+                            <div id="mapa" style="height: 300px; border-radius: 0.375rem;">
+
+                                <iframe 
+                                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2993.027714090621!2d2.1095889153230293!3d41.54314637925259!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12a49816718e30e5%3A0x44b0fb5d4f6e7d2c!2sPare%20Sallar%C3%A8s%2C%2067%2C%2008201%20Sabadell%2C%20Barcelona!5e0!3m2!1sca!2ses!4v1635789012345"
+                                    width="100%" 
+                                    height="300" 
+                                    style="border:0; border-radius: 0.375rem;" 
+                                    allowfullscreen="" 
+                                    loading="lazy">
+                                </iframe>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-4">
+        <div class="container">
+            <div class="row g-3">
+                <!-- Logo y descripción -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="d-flex align-items-center mb-2">
+                        <img src="img/logo_math-advantatge.png" alt="Math Advantage Logo" class="footer-logo me-2" style="height: 40px;">
+                        <h5 class="fw-bold mb-0 text-white"></h5>
+                    </div>
+                    <p class="text-light mb-2 small">
+                        Academia de Matemàtiques especialitzada en tots els nivells educatius. 
+                        Centre amb metodologia personalitzada i qualitat Erasmus+ des de 2016.
+                    </p>
+                    <div class="mb-2">
+                        <p class="text-light mb-1 small"><i class="fas fa-map-marker-alt me-2"></i>Pare Sallarès, 67, Sabadell</p>
+                        <p class="text-light mb-1 small"><i class="fas fa-phone me-2"></i>931 16 34 57 / 658 174 783</p>
+                        <p class="text-light mb-0 small"><i class="fas fa-envelope me-2"></i>info@math-advantage.com</p>
+                    </div>
+                </div>
+                
+                <!-- Cursos -->
+                <div class="col-lg-2 col-md-3 col-6">
+                    <h6 class="fw-bold mb-2 small">Cursos</h6>
+                    <ul class="list-unstyled small">
+                        <li class="mb-1"><a href="#" class="text-light text-decoration-none">ESO</a></li>
+                        <li class="mb-1"><a href="#" class="text-light text-decoration-none">Batxillerat</a></li>
+                        <li class="mb-1"><a href="#" class="text-light text-decoration-none">Universitari</a></li>
+                        <li><a href="#" class="text-light text-decoration-none">Selectivitat</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Horarios -->
+                <div class="col-lg-2 col-md-3 col-6">
+                    <h6 class="fw-bold mb-2 small">Horaris</h6>
+                    <div class="text-light small">
+                        <p class="mb-1"><strong>Atenció al Públic:</strong></p>
+                        <p class="mb-0">Matins: 10:00-13:00h</p>
+                        <p class="mb-0">Tardes: 16:30-20:30h</p>
+                        <p class="mb-0">Dilluns a Divendres</p>
+                    </div>
+                </div>
+                
+                <!-- Servicios -->
+                <div class="col-lg-2 col-md-6 col-6">
+                    <h6 class="fw-bold mb-2 small">Serveis</h6>
+                    <ul class="list-unstyled small">
+                        <li class="mb-1"><a href="#" class="text-light text-decoration-none">ESO i Batxillerat</a></li>
+                        <li class="mb-1"><a href="#" class="text-light text-decoration-none">Universitari</a></li>
+                        <li class="mb-1"><a href="#" class="text-light text-decoration-none">Selectivitat</a></li>
+                        <li><a href="#" class="text-light text-decoration-none">Erasmus+ Mobility</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Legal -->
+                <div class="col-lg-2 col-md-6 col-6">
+                    <h6 class="fw-bold mb-2 small">Legal</h6>
+                    <ul class="list-unstyled small">
+                        <li class="mb-1"><a href="#" class="text-light text-decoration-none">Política de privacitat</a></li>
+                        <li class="mb-1"><a href="#" class="text-light text-decoration-none">Condicions legals</a></li>
+                        <li><a href="#" class="text-light text-decoration-none">Cookies</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <hr class="my-3">
+            
+            <!-- Footer bottom -->
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <p class="mb-0 text-light small">&copy; 2025 Math Advantage. Tots els drets reservats.</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <div class="d-flex justify-content-md-end justify-content-start align-items-center">
+                        <p class="mb-0 text-light small me-3">
+                            Dissenyat amb <i class="fas fa-heart text-danger"></i> per a l'excel·lència educativa
+                        </p>
+                        <div class="social-links">
+                            <a href="https://www.facebook.com/mathadvantageLE" class="text-light me-2"><i class="fab fa-facebook-f"></i></a>
+                            <a href="#" class="text-light me-2"><i class="fab fa-instagram"></i></a>
+                            <a href="#" class="text-light me-2"><i class="fab fa-twitter"></i></a>
+                            <a href="#" class="text-light"><i class="fab fa-linkedin"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+
+    <div id="chatbot-button" class="position-fixed bottom-0 end-0 m-4">
+        <button class="chatbot-toggle pulse" onclick="toggleChatbot()">
+            <div class="chatbot-icon-container">
+                <div class="chatbot-avatar-mini">
+                    <span class="chatbot-symbol">∫π</span>
+                </div>
+                <div class="chatbot-status-dot"></div>
+                <div class="chatbot-ripple"></div>
+            </div>
+            <div class="chatbot-tooltip">
+                <span>Dr. Pythagoras IA</span>
+                <small>Assistent Matemàtic</small>
+            </div>
+        </button>
+    </div>
+
+
+    <div id="chatbot" class="position-fixed bottom-0 end-0 m-4 bg-white rounded-4 shadow-lg" style="width: 380px; height: 550px; display: none; border: 2px solid #8b5cf6; z-index: 9999; box-shadow: 0 25px 50px rgba(139, 92, 246, 0.3) !important;">
+
+        <div class="chatbot-header text-white p-3 rounded-top-4 d-flex justify-content-between align-items-center position-relative overflow-hidden" style="background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%); box-shadow: 0 4px 20px rgba(139, 92, 246, 0.4);">
+            <div class="d-flex align-items-center">
+                <div class="chatbot-avatar me-3 position-relative">
+                    <div class="avatar-circle bg-white bg-opacity-30 rounded-circle d-flex align-items-center justify-content-center" style="width: 45px; height: 45px; box-shadow: 0 2px 10px rgba(0,0,0,0.2);">
+                        <span class="text-white fw-bold" style="font-size: 1.1rem; text-shadow: 0 1px 3px rgba(0,0,0,0.3);">∫π</span>
+                    </div>
+                    <div class="status-indicator position-absolute bottom-0 end-0 bg-success rounded-circle animate-pulse" style="width: 10px; height: 10px; border: 2px solid white; box-shadow: 0 0 10px #10b981;"></div>
+                </div>
+                <div>
+                    <h6 class="mb-0 fw-bold" style="text-shadow: 0 1px 3px rgba(0,0,0,0.2);">Dr. Pythagoras</h6>
+                    <small class="text-white-75" style="font-size: 0.75rem;">
+                        <i class="fas fa-brain me-1"></i>Assistent Científic IA
+                    </small>
+                </div>
+            </div>
+            <div class="d-flex">
+                <button class="btn btn-sm btn-light btn-outline-light me-2" onclick="minimizeChatbot()" style="border-radius: 8px; background: rgba(255,255,255,0.2); backdrop-filter: blur(10px);">
+                    <i class="fas fa-minus text-white"></i>
+                </button>
+                <button class="btn btn-sm btn-light btn-outline-light" onclick="toggleChatbot()" style="border-radius: 8px; background: rgba(255,255,255,0.2); backdrop-filter: blur(10px);">
+                    <i class="fas fa-times text-white"></i>
+                </button>
+            </div>
+
+            <div class="position-absolute" style="top: -5px; right: 15px; opacity: 0.15; font-size: 2.5rem; color: #fbbf24;">∑</div>
+            <div class="position-absolute" style="bottom: -5px; left: 15px; opacity: 0.15; font-size: 1.8rem; color: #f59e0b;">π</div>
+        </div>
+        
+
+        <div id="chat-messages" class="p-4" style="height: 410px; overflow-y: auto; background: linear-gradient(to bottom, #fafbff 0%, #f8f9ff 100%);">
+            <div class="message bot-message mb-3">
+                <div class="d-flex align-items-start">
+                    <div class="bot-avatar me-3 flex-shrink-0">
+                        <div class="avatar-sm bg-gradient-primary rounded-circle d-flex align-items-center justify-content-center text-white" style="width: 35px; height: 35px;">
+                            <span class="fw-bold" style="font-size: 0.8rem;">∫π</span>
+                        </div>
+                    </div>
+                    <div class="flex-grow-1">
+                        <div class="message-header mb-1">
+                            <small class="text-muted fw-medium">Dr. Pythagoras</small>
+                            <span class="typing-indicator ms-2" style="display: none;">
+                                <span></span><span></span><span></span>
+                            </span>
+                        </div>
+                        <div class="message-bubble bg-white p-3 rounded-3 shadow-sm position-relative" style="border-left: 4px solid #667eea;">
+                            <div class="scientific-greeting">
+                                <strong class="text-primary">🔬 Salutacions científiques!</strong>
+                                <div class="mt-2 mb-2">
+                                    <span class="badge bg-light text-dark me-1" style="font-size: 0.7rem;">∫ Càlcul</span>
+                                    <span class="badge bg-light text-dark me-1" style="font-size: 0.7rem;">π Geometria</span>
+                                    <span class="badge bg-light text-dark" style="font-size: 0.7rem;">∑ Àlgebra</span>
+                                </div>
+                                <p class="mb-2">Sóc el <strong>Dr. Pythagoras</strong>, el vostre assistent d'intel·ligència artificial especialitzat en matemàtiques, física i química.</p>
+                                <div class="quick-options mt-3">
+                                    <p class="mb-2 fw-medium text-primary">Com puc ajudar-te?</p>
+                                    <div class="d-grid gap-1">
+                                        <button class="btn btn-outline-primary btn-sm text-start" onclick="sendQuickMessage('Informació sobre cursos')">
+                                            <i class="fas fa-book-open me-2"></i>Informació sobre cursos
+                                        </button>
+                                        <button class="btn btn-outline-primary btn-sm text-start" onclick="sendQuickMessage('Horaris i preus')">
+                                            <i class="fas fa-clock me-2"></i>Horaris i preus
+                                        </button>
+                                        <button class="btn btn-outline-primary btn-sm text-start" onclick="sendQuickMessage('Metodologia d\'ensenyament')">
+                                            <i class="fas fa-graduation-cap me-2"></i>Metodologia d'ensenyament
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+
+        <div class="chat-input-area p-3 border-top bg-white rounded-bottom-4">
+            <div class="input-group">
+                <input type="text" id="chat-input" class="form-control border-0 shadow-sm" placeholder="Escriu la teva pregunta científica..." style="background: #f8f9ff; border-radius: 20px 0 0 20px; padding-left: 15px;">
+                <button class="btn btn-primary shadow-sm" onclick="sendMessage()" style="border-radius: 0 20px 20px 0; padding: 0 15px;">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+            <div class="mt-2 text-center">
+                <small class="text-muted">
+                    <i class="fas fa-shield-alt me-1"></i>Conversa segura amb IA
+                </small>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="politicaModal" tabindex="-1">
+    <div class="modal fade" id="politicaModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Política de Privacitat</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p>En Math Advantage respectem la teva privacitat i ens comprometem a protegir les teves dades personals...</p>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="assets/js/main.js"></script>
+</body>
+</html>

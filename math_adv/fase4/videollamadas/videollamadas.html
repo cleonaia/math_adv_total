@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Videollamades - Math Advantage</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+            min-height: 100vh;
+            padding-top: 76px;
+        }
+        
+        .video-container {
+            position: relative;
+            width: 100%;
+            height: 70vh;
+            background: #000;
+            border-radius: 15px;
+            overflow: hidden;
+            margin-bottom: 2rem;
+        }
+        
+        #jitsi-container {
+            width: 100%;
+            height: 100%;
+        }
+        
+        .meeting-info {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+        
+        .participants-panel {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+        }
+        
+        .participant-item {
+            display: flex;
+            align-items: center;
+            padding: 0.8rem 0;
+            border-bottom: 1px solid #e0e7ff;
+        }
+        
+        .participant-item:last-child {
+            border-bottom: none;
+        }
+        
+        .participant-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #8b5cf6, #06b6d4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            margin-right: 1rem;
+        }
+        
+        .participant-status {
+            margin-left: auto;
+        }
+        
+        .status-online {
+            color: #10b981;
+        }
+        
+        .status-offline {
+            color: #ef4444;
+        }
+        
+        .controls-panel {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 50px;
+            padding: 1rem 2rem;
+            z-index: 1000;
+        }
+        
+        .control-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: none;
+            margin: 0 0.5rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+        
+        .control-btn.mic-btn {
+            background: #10b981;
+            color: white;
+        }
+        
+        .control-btn.mic-btn.muted {
+            background: #ef4444;
+        }
+        
+        .control-btn.camera-btn {
+            background: #06b6d4;
+            color: white;
+        }
+        
+        .control-btn.camera-btn.off {
+            background: #ef4444;
+        }
+        
+        .control-btn.end-btn {
+            background: #ef4444;
+            color: white;
+        }
+        
+        .control-btn.share-btn {
+            background: #8b5cf6;
+            color: white;
+        }
+        
+        .control-btn:hover {
+            transform: scale(1.1);
+        }
+        
+        .meeting-card {
+            background: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .meeting-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+        }
+        
+        .meeting-status {
+            font-size: 0.8rem;
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            font-weight: 500;
+        }
+        
+        .status-programada {
+            background: #dbeafe;
+            color: #1d4ed8;
+        }
+        
+        .status-en-curso {
+            background: #dcfce7;
+            color: #166534;
+        }
+        
+        .status-finalizada {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+        
+        @media (max-width: 768px) {
+            .video-container {
+                height: 50vh;
+            }
+            
+            .controls-panel {
+                left: 1rem;
+                right: 1rem;
+                transform: none;
+                border-radius: 25px;
+            }
+            
+            .control-btn {
+                width: 40px;
+                height: 40px;
+                font-size: 1rem;
+                margin: 0 0.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top" style="background: rgba(0,0,0,0.8); backdrop-filter: blur(10px);">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="../../index.html">
+                <img src="../../img/logo_math-advantatge.png" alt="Math Advantage" height="40" class="me-2">
+                <span>Videollamades</span>
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="../../portal/welcome.php">
+                            <i class="fas fa-home me-2"></i>Portal
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <button class="btn btn-outline-light btn-sm" onclick="toggleParticipants()">
+                            <i class="fas fa-users me-2"></i>Participants
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid" id="main-content">
+        <!-- Vista de Lista de Reuniones -->
+        <div id="meetings-list" style="display: block;">
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="meeting-info">
+                        <h2 class="text-primary mb-3">
+                            <i class="fas fa-video me-3"></i>Les Meves Videollamades
+                        </h2>
+                        <p class="text-muted mb-4">Gestiona les teves sessions de videollamades i reunions virtuals</p>
+                        
+                        <div class="row">
+                            <div class="col-md-3 col-sm-6 mb-3">
+                                <div class="text-center">
+                                    <h3 class="text-primary">5</h3>
+                                    <small class="text-muted">Programades Avui</small>
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-sm-6 mb-3">
+                                <div class="text-center">
+                                    <h3 class="text-success">12</h3>
+                                    <small class="text-muted">Aquest Mes</small>
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-sm-6 mb-3">
+                                <div class="text-center">
+                                    <h3 class="text-info">156</h3>
+                                    <small class="text-muted">Total Participants</small>
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-sm-6 mb-3">
+                                <div class="text-center">
+                                    <h3 class="text-warning">85%</h3>
+                                    <small class="text-muted">Taxa d'Assistència</small>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="d-flex gap-2 mt-3">
+                            <button class="btn btn-primary" onclick="createMeeting()">
+                                <i class="fas fa-plus me-2"></i>Nova Videollamada
+                            </button>
+                            <button class="btn btn-outline-primary" onclick="joinMeetingById()">
+                                <i class="fas fa-sign-in-alt me-2"></i>Unir-se per ID
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <!-- Lista de Reuniones -->
+                <div class="col-lg-8">
+                    <div class="meeting-card">
+                        <div class="d-flex justify-content-between align-items-start mb-3">
+                            <div>
+                                <h5 class="mb-1">Classe d'Àlgebra Lineal</h5>
+                                <p class="text-muted mb-2">Resolució de sistemes d'equacions</p>
+                                <small class="text-muted">
+                                    <i class="fas fa-calendar me-1"></i>Avui, 10:00 - 11:30
+                                    <i class="fas fa-users ms-3 me-1"></i>23 participants
+                                </small>
+                            </div>
+                            <span class="meeting-status status-programada">Programada</span>
+                        </div>
+                        <div class="d-flex gap-2">
+                            <button class="btn btn-success btn-sm" onclick="joinMeeting('room1')">
+                                <i class="fas fa-video me-2"></i>Unir-se
+                            </button>
+                            <button class="btn btn-outline-primary btn-sm" onclick="editMeeting(1)">
+                                <i class="fas fa-edit me-2"></i>Editar
+                            </button>
+                            <button class="btn btn-outline-danger btn-sm" onclick="deleteMeeting(1)">
+                                <i class="fas fa-trash me-2"></i>Eliminar
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="meeting-card">
+                        <div class="d-flex justify-content-between align-items-start mb-3">
+                            <div>
+                                <h5 class="mb-1">Tutoria Individual - Anna García</h5>
+                                <p class="text-muted mb-2">Repàs d'examen de derivades</p>
+                                <small class="text-muted">
+                                    <i class="fas fa-calendar me-1"></i>Demà, 15:00 - 15:45
+                                    <i class="fas fa-user ms-3 me-1"></i>Privada
+                                </small>
+                            </div>
+                            <span class="meeting-status status-programada">Programada</span>
+                        </div>
+                        <div class="d-flex gap-2">
+                            <button class="btn btn-success btn-sm" onclick="joinMeeting('room2')">
+                                <i class="fas fa-video me-2"></i>Unir-se
+                            </button>
+                            <button class="btn btn-outline-primary btn-sm">
+                                <i class="fas fa-edit me-2"></i>Editar
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="meeting-card">
+                        <div class="d-flex justify-content-between align-items-start mb-3">
+                            <div>
+                                <h5 class="mb-1">Reunió de Professors</h5>
+                                <p class="text-muted mb-2">Planificació setmanal i coordinació</p>
+                                <small class="text-muted">
+                                    <i class="fas fa-calendar me-1"></i>Ahir, 16:00 - 17:00
+                                    <i class="fas fa-users ms-3 me-1"></i>8 participants
+                                </small>
+                            </div>
+                            <span class="meeting-status status-finalizada">Finalitzada</span>
+                        </div>
+                        <div class="d-flex gap-2">
+                            <button class="btn btn-outline-info btn-sm">
+                                <i class="fas fa-chart-bar me-2"></i>Estadístiques
+                            </button>
+                            <button class="btn btn-outline-secondary btn-sm">
+                                <i class="fas fa-download me-2"></i>Gravació
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Panel Lateral -->
+                <div class="col-lg-4">
+                    <div class="participants-panel">
+                        <h6 class="mb-3">
+                            <i class="fas fa-clock me-2"></i>Pròximes Reunions
+                        </h6>
+                        
+                        <div class="mb-3 p-3 bg-light rounded">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <strong>10:00</strong>
+                                    <br><small class="text-muted">Àlgebra</small>
+                                </div>
+                                <button class="btn btn-sm btn-success" onclick="joinMeeting('room1')">
+                                    Unir-se
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3 p-3 bg-light rounded">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <strong>11:30</strong>
+                                    <br><small class="text-muted">Càlcul</small>
+                                </div>
+                                <button class="btn btn-sm btn-outline-primary" disabled>
+                                    Més tard
+                                </button>
+                            </div>
+                        </div>
+
+                        <hr>
+
+                        <h6 class="mb-3">
+                            <i class="fas fa-history me-2"></i>Historial Recent
+                        </h6>
+                        
+                        <div class="small">
+                            <div class="d-flex justify-content-between py-2">
+                                <span>Reunió Professors</span>
+                                <span class="text-muted">1h 15m</span>
+                            </div>
+                            <div class="d-flex justify-content-between py-2">
+                                <span>Tutoria Marc</span>
+                                <span class="text-muted">45m</span>
+                            </div>
+                            <div class="d-flex justify-content-between py-2">
+                                <span>Classe Física</span>
+                                <span class="text-muted">1h 30m</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Vista de Videollamada Activa -->
+        <div id="meeting-room" style="display: none;">
+            <div class="row">
+                <div class="col-lg-9">
+                    <div class="video-container">
+                        <div id="jitsi-container"></div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-3" id="participants-sidebar">
+                    <div class="participants-panel">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h6 class="mb-0">
+                                <i class="fas fa-users me-2"></i>Participants (3)
+                            </h6>
+                            <button class="btn btn-sm btn-outline-secondary" onclick="toggleParticipants()">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        
+                        <div class="participant-item">
+                            <div class="participant-avatar">
+                                <i class="fas fa-crown text-warning"></i>
+                            </div>
+                            <div>
+                                <div class="fw-semibold">Prof. Maria López</div>
+                                <small class="text-muted">Moderador</small>
+                            </div>
+                            <div class="participant-status">
+                                <i class="fas fa-microphone status-online"></i>
+                            </div>
+                        </div>
+                        
+                        <div class="participant-item">
+                            <div class="participant-avatar">AG</div>
+                            <div>
+                                <div class="fw-semibold">Anna García</div>
+                                <small class="text-muted">Estudiant</small>
+                            </div>
+                            <div class="participant-status">
+                                <i class="fas fa-microphone-slash status-offline"></i>
+                            </div>
+                        </div>
+                        
+                        <div class="participant-item">
+                            <div class="participant-avatar">ML</div>
+                            <div>
+                                <div class="fw-semibold">Marc López</div>
+                                <small class="text-muted">Estudiant</small>
+                            </div>
+                            <div class="participant-status">
+                                <i class="fas fa-microphone status-online"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Controles de la Videollamada -->
+            <div class="controls-panel">
+                <button class="control-btn mic-btn" id="mic-toggle" onclick="toggleMic()" title="Silenciar/Activar micrófono">
+                    <i class="fas fa-microphone"></i>
+                </button>
+                <button class="control-btn camera-btn" id="camera-toggle" onclick="toggleCamera()" title="Activar/Desactivar cámara">
+                    <i class="fas fa-video"></i>
+                </button>
+                <button class="control-btn share-btn" onclick="shareScreen()" title="Compartir pantalla">
+                    <i class="fas fa-desktop"></i>
+                </button>
+                <button class="control-btn end-btn" onclick="endMeeting()" title="Finalizar reunión">
+                    <i class="fas fa-phone-slash"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para Crear Reunión -->
+    <div class="modal fade" id="createMeetingModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="fas fa-video me-2"></i>Nova Videollamada
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <form id="createMeetingForm">
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-8 mb-3">
+                                <label class="form-label">Títol de la Reunió *</label>
+                                <input type="text" class="form-control" name="titulo" required>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">Tipus *</label>
+                                <select class="form-select" name="tipo" required>
+                                    <option value="clase">Classe</option>
+                                    <option value="tutoria">Tutoria</option>
+                                    <option value="reunion">Reunió</option>
+                                    <option value="webinar">Webinar</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Descripció</label>
+                            <textarea class="form-control" name="descripcion" rows="3"></textarea>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Data i Hora *</label>
+                                <input type="datetime-local" class="form-control" name="fecha_programada" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Duració (min) *</label>
+                                <input type="number" class="form-control" name="duracion_estimada" value="60" min="15" max="300">
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Màxim Participants</label>
+                                <input type="number" class="form-control" name="max_participantes" value="50" min="2" max="100">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="mt-4">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="requiere_aprobacion">
+                                        <label class="form-check-label">
+                                            Requereix aprovació per unir-se
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="grabacion_activa">
+                                        <label class="form-check-label">
+                                            Activar gravació
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel·lar</button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save me-2"></i>Crear Videollamada
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Jitsi Meet API -->
+    <script src="https://8x8.vc/libs/lib-jitsi-meet.min.js"></script>
+    
+    <script>
+        let api = null;
+        let isAudioMuted = false;
+        let isVideoMuted = false;
+        
+        // Crear nueva reunión
+        function createMeeting() {
+            new bootstrap.Modal(document.getElementById('createMeetingModal')).show();
+        }
+        
+        // Manejar envío del formulario
+        document.getElementById('createMeetingForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const meetingData = Object.fromEntries(formData.entries());
+            
+            // Aquí iría la llamada AJAX para crear la reunión
+            console.log('Creando reunión:', meetingData);
+            
+            bootstrap.Modal.getInstance(document.getElementById('createMeetingModal')).hide();
+            showNotification('Videollamada creada correctament!', 'success');
+        });
+        
+        // Unirse a reunión
+        function joinMeeting(roomId) {
+            document.getElementById('meetings-list').style.display = 'none';
+            document.getElementById('meeting-room').style.display = 'block';
+            
+            initializeJitsi(roomId);
+        }
+        
+        // Inicializar Jitsi Meet
+        function initializeJitsi(roomName) {
+            const domain = 'meet.jit.si';
+            const options = {
+                roomName: roomName,
+                width: '100%',
+                height: '100%',
+                parentNode: document.querySelector('#jitsi-container'),
+                configOverwrite: {
+                    startWithAudioMuted: false,
+                    startWithVideoMuted: false,
+                    enableWelcomePage: false,
+                    enableClosePage: false,
+                    prejoinPageEnabled: false,
+                    disableDeepLinking: true
+                },
+                interfaceConfigOverwrite: {
+                    TOOLBAR_BUTTONS: [
+                        'microphone', 'camera', 'closedcaptions', 'desktop',
+                        'fullscreen', 'fodeviceselection', 'hangup',
+                        'profile', 'chat', 'settings', 'raisehand',
+                        'videoquality', 'filmstrip', 'tileview', 'select-background',
+                        'download', 'help', 'mute-everyone'
+                    ],
+                    SETTINGS_SECTIONS: [ 'devices', 'language', 'moderator', 'profile', 'calendar' ],
+                    SHOW_JITSI_WATERMARK: false,
+                    SHOW_WATERMARK_FOR_GUESTS: false,
+                    DEFAULT_BACKGROUND: '#8b5cf6'
+                },
+                userInfo: {
+                    displayName: 'Usuario Math Advantage'
+                }
+            };
+            
+            api = new JitsiMeetExternalAPI(domain, options);
+            
+            // Event listeners
+            api.addEventListener('videoConferenceJoined', (data) => {
+                console.log('Unido a la conferencia:', data);
+                updateMeetingStatus('connected');
+            });
+            
+            api.addEventListener('videoConferenceLeft', (data) => {
+                console.log('Salió de la conferencia:', data);
+                endMeeting();
+            });
+            
+            api.addEventListener('participantJoined', (data) => {
+                console.log('Participante unido:', data);
+                updateParticipantsList();
+            });
+            
+            api.addEventListener('participantLeft', (data) => {
+                console.log('Participante salió:', data);
+                updateParticipantsList();
+            });
+            
+            api.addEventListener('audioMuteStatusChanged', (data) => {
+                isAudioMuted = data.muted;
+                updateMicButton();
+            });
+            
+            api.addEventListener('videoMuteStatusChanged', (data) => {
+                isVideoMuted = data.muted;
+                updateCameraButton();
+            });
+        }
+        
+        // Controles de audio/video
+        function toggleMic() {
+            if (api) {
+                if (isAudioMuted) {
+                    api.executeCommand('toggleAudio');
+                } else {
+                    api.executeCommand('toggleAudio');
+                }
+            }
+        }
+        
+        function toggleCamera() {
+            if (api) {
+                api.executeCommand('toggleVideo');
+            }
+        }
+        
+        function shareScreen() {
+            if (api) {
+                api.executeCommand('toggleShareScreen');
+            }
+        }
+        
+        // Actualizar botones
+        function updateMicButton() {
+            const button = document.getElementById('mic-toggle');
+            const icon = button.querySelector('i');
+            
+            if (isAudioMuted) {
+                button.classList.add('muted');
+                icon.className = 'fas fa-microphone-slash';
+            } else {
+                button.classList.remove('muted');
+                icon.className = 'fas fa-microphone';
+            }
+        }
+        
+        function updateCameraButton() {
+            const button = document.getElementById('camera-toggle');
+            const icon = button.querySelector('i');
+            
+            if (isVideoMuted) {
+                button.classList.add('off');
+                icon.className = 'fas fa-video-slash';
+            } else {
+                button.classList.remove('off');
+                icon.className = 'fas fa-video';
+            }
+        }
+        
+        // Finalizar reunión
+        function endMeeting() {
+            if (api) {
+                api.dispose();
+                api = null;
+            }
+            
+            document.getElementById('meetings-list').style.display = 'block';
+            document.getElementById('meeting-room').style.display = 'none';
+            
+            // Registrar salida en el servidor
+            // saveExitTime();
+        }
+        
+        // Toggle panel de participantes
+        function toggleParticipants() {
+            const sidebar = document.getElementById('participants-sidebar');
+            sidebar.style.display = sidebar.style.display === 'none' ? 'block' : 'none';
+        }
+        
+        // Actualizar lista de participantes
+        function updateParticipantsList() {
+            // Implementar actualización de la lista de participantes
+            console.log('Actualizando lista de participantes');
+        }
+        
+        // Actualizar estado de la reunión
+        function updateMeetingStatus(status) {
+            console.log('Estado de la reunión:', status);
+        }
+        
+        // Unirse por ID
+        function joinMeetingById() {
+            const roomId = prompt('Introdueix l\'ID de la videollamada:');
+            if (roomId && roomId.trim()) {
+                joinMeeting(roomId.trim());
+            }
+        }
+        
+        // Funciones auxiliares
+        function editMeeting(id) {
+            console.log('Editar reunión:', id);
+        }
+        
+        function deleteMeeting(id) {
+            if (confirm('¿Estás seguro de que quieres eliminar esta reunión?')) {
+                console.log('Eliminar reunión:', id);
+            }
+        }
+        
+        function showNotification(message, type = 'info') {
+            console.log(`${type.toUpperCase()}: ${message}`);
+        }
+        
+        // Cleanup al salir
+        window.addEventListener('beforeunload', function() {
+            if (api) {
+                api.dispose();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendari - Math Advantage</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- FullCalendar CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding-top: 76px;
+        }
+        
+        .calendar-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .calendar-header {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .calendar-controls {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .btn-calendar-control {
+            padding: 0.5rem 1rem;
+            border-radius: 10px;
+            border: 2px solid #e2e8f0;
+            background: white;
+            color: #64748b;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-calendar-control:hover {
+            border-color: #8b5cf6;
+            color: #8b5cf6;
+        }
+        
+        .btn-calendar-control.active {
+            background: #8b5cf6;
+            color: white;
+            border-color: #8b5cf6;
+        }
+        
+        .fc {
+            --fc-border-color: #e2e8f0;
+            --fc-button-bg-color: #8b5cf6;
+            --fc-button-border-color: #8b5cf6;
+            --fc-button-hover-bg-color: #7c3aed;
+            --fc-button-active-bg-color: #6d28d9;
+            --fc-today-bg-color: #f0f9ff;
+        }
+        
+        .fc-header-toolbar {
+            margin-bottom: 1.5rem;
+        }
+        
+        .fc-toolbar-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #1e293b;
+        }
+        
+        .fc-button {
+            border-radius: 8px;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+        }
+        
+        .fc-daygrid-event {
+            border-radius: 6px;
+            border: none;
+            padding: 2px 6px;
+            font-size: 0.85rem;
+        }
+        
+        .fc-event-title {
+            font-weight: 500;
+        }
+        
+        .event-clase { background-color: #3b82f6; }
+        .event-examen { background-color: #ef4444; }
+        .event-tutoria { background-color: #10b981; }
+        .event-reunion { background-color: #f59e0b; }
+        .event-evento { background-color: #8b5cf6; }
+        
+        .sidebar-calendar {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+            padding: 1.5rem;
+            height: fit-content;
+        }
+        
+        .upcoming-events {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        .upcoming-event {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            margin-bottom: 0.5rem;
+            background: #f8fafc;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .upcoming-event:hover {
+            background: #e2e8f0;
+            transform: translateY(-2px);
+        }
+        
+        .event-time {
+            background: #8b5cf6;
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            min-width: 80px;
+            text-align: center;
+        }
+        
+        .event-info {
+            margin-left: 1rem;
+            flex-grow: 1;
+        }
+        
+        .event-title {
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 0.25rem;
+        }
+        
+        .event-details {
+            font-size: 0.85rem;
+            color: #64748b;
+        }
+        
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .quick-action {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1rem;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            text-decoration: none;
+            color: #64748b;
+            transition: all 0.3s ease;
+        }
+        
+        .quick-action:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+            color: #8b5cf6;
+        }
+        
+        .quick-action-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .action-clase .quick-action-icon { background: #dbeafe; color: #3b82f6; }
+        .action-tutoria .quick-action-icon { background: #d1fae5; color: #10b981; }
+        .action-examen .quick-action-icon { background: #fee2e2; color: #ef4444; }
+        .action-reunion .quick-action-icon { background: #fef3c7; color: #f59e0b; }
+        
+        /* Modal personalizado */
+        .modal-content {
+            border-radius: 20px;
+            border: none;
+        }
+        
+        .modal-header {
+            background: linear-gradient(135deg, #8b5cf6 0%, #06b6d4 100%);
+            color: white;
+            border-radius: 20px 20px 0 0;
+        }
+        
+        .form-label {
+            font-weight: 500;
+            color: #374151;
+        }
+        
+        .form-control, .form-select {
+            border-radius: 10px;
+            border: 2px solid #e5e7eb;
+            padding: 0.75rem 1rem;
+        }
+        
+        .form-control:focus, .form-select:focus {
+            border-color: #8b5cf6;
+            box-shadow: 0 0 0 0.2rem rgba(139, 92, 246, 0.25);
+        }
+        
+        .time-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+        
+        .time-slot {
+            padding: 0.5rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .time-slot:hover {
+            border-color: #8b5cf6;
+        }
+        
+        .time-slot.occupied {
+            background: #fee2e2;
+            color: #ef4444;
+            cursor: not-allowed;
+        }
+        
+        .time-slot.selected {
+            background: #8b5cf6;
+            color: white;
+            border-color: #8b5cf6;
+        }
+        
+        .reservation-card {
+            background: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            border-left: 4px solid #8b5cf6;
+        }
+        
+        .reservation-status {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        
+        .status-confirmada { background: #d1fae5; color: #065f46; }
+        .status-pendiente { background: #fef3c7; color: #92400e; }
+        .status-cancelada { background: #fee2e2; color: #991b1b; }
+        
+        @media (max-width: 768px) {
+            .calendar-container {
+                padding: 1rem;
+            }
+            
+            .calendar-header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .calendar-controls {
+                justify-content: center;
+            }
+            
+            .sidebar-calendar {
+                margin-top: 2rem;
+            }
+            
+            .fc-toolbar {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .fc-toolbar-chunk {
+                display: flex;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top" style="background: rgba(0,0,0,0.8); backdrop-filter: blur(10px);">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="../../index.html">
+                <img src="../../img/logo_math-advantatge.png" alt="Math Advantage" height="40" class="me-2">
+                <span>Calendari</span>
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="../../portal/welcome.php">
+                            <i class="fas fa-home me-2"></i>Portal
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#calendar">
+                            <i class="fas fa-calendar-alt me-2"></i>Calendari
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#reservations">
+                            <i class="fas fa-clock me-2"></i>Les Meves Reserves
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+        <!-- Acciones Rápidas -->
+        <div class="quick-actions">
+            <a href="#" class="quick-action action-clase" data-bs-toggle="modal" data-bs-target="#newEventModal" data-type="clase">
+                <div class="quick-action-icon">
+                    <i class="fas fa-chalkboard-teacher"></i>
+                </div>
+                <span>Nova Classe</span>
+            </a>
+            <a href="#" class="quick-action action-tutoria" data-bs-toggle="modal" data-bs-target="#newEventModal" data-type="tutoria">
+                <div class="quick-action-icon">
+                    <i class="fas fa-user-graduate"></i>
+                </div>
+                <span>Tutoria</span>
+            </a>
+            <a href="#" class="quick-action action-examen" data-bs-toggle="modal" data-bs-target="#newEventModal" data-type="examen">
+                <div class="quick-action-icon">
+                    <i class="fas fa-file-alt"></i>
+                </div>
+                <span>Examen</span>
+            </a>
+            <a href="#" class="quick-action action-reunion" data-bs-toggle="modal" data-bs-target="#newEventModal" data-type="reunion">
+                <div class="quick-action-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <span>Reunió</span>
+            </a>
+        </div>
+
+        <div class="row">
+            <!-- Calendario Principal -->
+            <div class="col-lg-8">
+                <div class="calendar-container">
+                    <div class="calendar-header">
+                        <h4 class="mb-0">
+                            <i class="fas fa-calendar-alt me-2 text-primary"></i>
+                            Calendari Acadèmic
+                        </h4>
+                        <div class="calendar-controls">
+                            <button class="btn btn-calendar-control active" data-view="dayGridMonth">Mes</button>
+                            <button class="btn btn-calendar-control" data-view="timeGridWeek">Setmana</button>
+                            <button class="btn btn-calendar-control" data-view="timeGridDay">Dia</button>
+                            <button class="btn btn-calendar-control" data-view="listWeek">Llista</button>
+                        </div>
+                    </div>
+                    
+                    <div id="calendar"></div>
+                </div>
+            </div>
+
+            <!-- Sidebar -->
+            <div class="col-lg-4">
+                <!-- Pròxims Events -->
+                <div class="sidebar-calendar mb-4">
+                    <h5 class="mb-3">
+                        <i class="fas fa-clock me-2 text-warning"></i>
+                        Pròxims Events
+                    </h5>
+                    <div class="upcoming-events" id="upcoming-events">
+                        <div class="upcoming-event">
+                            <div class="event-time">09:00</div>
+                            <div class="event-info">
+                                <div class="event-title">Matemàtiques Avançades</div>
+                                <div class="event-details">Àlgebra Lineal - Aula 201</div>
+                            </div>
+                        </div>
+                        
+                        <div class="upcoming-event">
+                            <div class="event-time">11:30</div>
+                            <div class="event-info">
+                                <div class="event-title">Tutoria Individual</div>
+                                <div class="event-details">Prof. García - Despatx 15</div>
+                            </div>
+                        </div>
+                        
+                        <div class="upcoming-event">
+                            <div class="event-time">15:00</div>
+                            <div class="event-info">
+                                <div class="event-title">Examen Parcial</div>
+                                <div class="event-details">Càlcul Diferencial - Aula Magna</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Estadístiques Ràpides -->
+                <div class="sidebar-calendar">
+                    <h5 class="mb-3">
+                        <i class="fas fa-chart-pie me-2 text-info"></i>
+                        Resum Setmanal
+                    </h5>
+                    <div class="row text-center">
+                        <div class="col-6 mb-3">
+                            <div class="h4 text-primary mb-1">12</div>
+                            <small class="text-muted">Classes</small>
+                        </div>
+                        <div class="col-6 mb-3">
+                            <div class="h4 text-success mb-1">3</div>
+                            <small class="text-muted">Tutories</small>
+                        </div>
+                        <div class="col-6">
+                            <div class="h4 text-warning mb-1">2</div>
+                            <small class="text-muted">Exàmens</small>
+                        </div>
+                        <div class="col-6">
+                            <div class="h4 text-info mb-1">1</div>
+                            <small class="text-muted">Reunions</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mis Reservas -->
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="calendar-container">
+                    <h5 class="mb-4">
+                        <i class="fas fa-bookmark me-2 text-success"></i>
+                        Les Meves Reserves
+                    </h5>
+                    
+                    <div class="row" id="my-reservations">
+                        <div class="col-md-6 col-lg-4">
+                            <div class="reservation-card">
+                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                    <h6 class="mb-0">Tutoria Individual</h6>
+                                    <span class="reservation-status status-confirmada">Confirmada</span>
+                                </div>
+                                <p class="text-muted mb-2">Prof. Marina García</p>
+                                <div class="d-flex justify-content-between text-sm">
+                                    <span><i class="fas fa-calendar me-1"></i>25 Oct, 2024</span>
+                                    <span><i class="fas fa-clock me-1"></i>10:30 - 11:30</span>
+                                </div>
+                                <div class="mt-3">
+                                    <button class="btn btn-sm btn-outline-danger">
+                                        <i class="fas fa-times me-1"></i>Cancel·lar
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-primary ms-2">
+                                        <i class="fas fa-video me-1"></i>Unir-se
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 col-lg-4">
+                            <div class="reservation-card">
+                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                    <h6 class="mb-0">Classe Grupal</h6>
+                                    <span class="reservation-status status-pendiente">Pendent</span>
+                                </div>
+                                <p class="text-muted mb-2">Prof. Joan Ferrer</p>
+                                <div class="d-flex justify-content-between text-sm">
+                                    <span><i class="fas fa-calendar me-1"></i>28 Oct, 2024</span>
+                                    <span><i class="fas fa-clock me-1"></i>16:00 - 17:00</span>
+                                </div>
+                                <div class="mt-3">
+                                    <button class="btn btn-sm btn-outline-warning">
+                                        <i class="fas fa-clock me-1"></i>En espera
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Nuevo Evento -->
+    <div class="modal fade" id="newEventModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="fas fa-plus me-2"></i>
+                        Nou Event al Calendari
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="eventForm">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Tipus d'Event</label>
+                                    <select class="form-select" id="eventType" required>
+                                        <option value="clase">Classe</option>
+                                        <option value="tutoria">Tutoria</option>
+                                        <option value="examen">Examen</option>
+                                        <option value="reunion">Reunió</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Professor</label>
+                                    <select class="form-select" id="eventTeacher" required>
+                                        <option value="">Selecciona professor</option>
+                                        <option value="1">Prof. Marina García</option>
+                                        <option value="2">Prof. Joan Ferrer</option>
+                                        <option value="3">Prof. Laura Martín</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Títol</label>
+                            <input type="text" class="form-control" id="eventTitle" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Descripció</label>
+                            <textarea class="form-control" id="eventDescription" rows="3"></textarea>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Data</label>
+                                    <input type="date" class="form-control" id="eventDate" required>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="mb-3">
+                                    <label class="form-label">Hora Inici</label>
+                                    <input type="time" class="form-control" id="eventStartTime" required>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="mb-3">
+                                    <label class="form-label">Hora Fi</label>
+                                    <input type="time" class="form-control" id="eventEndTime" required>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Aula/Ubicació</label>
+                                    <input type="text" class="form-control" id="eventLocation">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Capacitat Màxima</label>
+                                    <input type="number" class="form-control" id="eventCapacity" min="1" max="50" value="1">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Horaris Disponibles (para profesores) -->
+                        <div class="mb-3" id="availableTimesContainer" style="display: none;">
+                            <label class="form-label">Horaris Disponibles</label>
+                            <div class="time-grid" id="availableTimes">
+                                <!-- Se llenará dinámicamente -->
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel·lar</button>
+                    <button type="submit" class="btn btn-primary" form="eventForm">
+                        <i class="fas fa-save me-2"></i>Crear Event
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Detalles de Evento -->
+    <div class="modal fade" id="eventDetailModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="eventDetailTitle">Detalls de l'Event</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body" id="eventDetailBody">
+                    <!-- Se llenará dinámicamente -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tancar</button>
+                    <button type="button" class="btn btn-success" id="reserveEventBtn">
+                        <i class="fas fa-bookmark me-2"></i>Reservar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- FullCalendar JS -->
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/locales/ca.global.min.js"></script>
+    
+    <script>
+        let calendar;
+        
+        // Datos de ejemplo
+        const sampleEvents = [
+            {
+                id: '1',
+                title: 'Matemàtiques Avançades',
+                start: '2024-10-25T09:00:00',
+                end: '2024-10-25T10:30:00',
+                className: 'event-clase',
+                extendedProps: {
+                    type: 'clase',
+                    teacher: 'Prof. Marina García',
+                    location: 'Aula 201',
+                    description: 'Àlgebra Lineal - Sistemes d\'equacions'
+                }
+            },
+            {
+                id: '2',
+                title: 'Tutoria Individual',
+                start: '2024-10-25T11:30:00',
+                end: '2024-10-25T12:30:00',
+                className: 'event-tutoria',
+                extendedProps: {
+                    type: 'tutoria',
+                    teacher: 'Prof. Marina García',
+                    location: 'Despatx 15',
+                    description: 'Revisió d\'exercicis pendents'
+                }
+            },
+            {
+                id: '3',
+                title: 'Examen Parcial',
+                start: '2024-10-25T15:00:00',
+                end: '2024-10-25T17:00:00',
+                className: 'event-examen',
+                extendedProps: {
+                    type: 'examen',
+                    teacher: 'Prof. Joan Ferrer',
+                    location: 'Aula Magna',
+                    description: 'Càlcul Diferencial - Temes 1-5'
+                }
+            }
+        ];
+        
+        // Inicializar cuando se carga la página
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeCalendar();
+            setupEventHandlers();
+        });
+        
+        // Inicializar calendario
+        function initializeCalendar() {
+            const calendarEl = document.getElementById('calendar');
+            
+            calendar = new FullCalendar.Calendar(calendarEl, {
+                locale: 'ca',
+                initialView: 'dayGridMonth',
+                headerToolbar: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
+                },
+                height: 'auto',
+                events: sampleEvents,
+                eventClick: function(info) {
+                    showEventDetails(info.event);
+                },
+                dateClick: function(info) {
+                    openNewEventModal(info.date);
+                },
+                eventDidMount: function(info) {
+                    // Tooltip con información del evento
+                    info.el.setAttribute('title', 
+                        `${info.event.title}\n${info.event.extendedProps.teacher}\n${info.event.extendedProps.location}`
+                    );
+                }
+            });
+            
+            calendar.render();
+        }
+        
+        // Configurar event handlers
+        function setupEventHandlers() {
+            // Controles de vista del calendario
+            document.querySelectorAll('.btn-calendar-control').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.btn-calendar-control').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    const view = this.getAttribute('data-view');
+                    calendar.changeView(view);
+                });
+            });
+            
+            // Formulario de nuevo evento
+            document.getElementById('eventForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                createEvent();
+            });
+            
+            // Acciones rápidas
+            document.querySelectorAll('.quick-action').forEach(action => {
+                action.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const type = this.getAttribute('data-type');
+                    document.getElementById('eventType').value = type;
+                });
+            });
+            
+            // Cambio de fecha para mostrar horarios disponibles
+            document.getElementById('eventDate').addEventListener('change', loadAvailableTimes);
+            document.getElementById('eventTeacher').addEventListener('change', loadAvailableTimes);
+        }
+        
+        // Mostrar detalles de evento
+        function showEventDetails(event) {
+            const modal = new bootstrap.Modal(document.getElementById('eventDetailModal'));
+            const titleEl = document.getElementById('eventDetailTitle');
+            const bodyEl = document.getElementById('eventDetailBody');
+            
+            titleEl.textContent = event.title;
+            
+            const startTime = event.start.toLocaleTimeString('ca-ES', {hour: '2-digit', minute: '2-digit'});
+            const endTime = event.end ? event.end.toLocaleTimeString('ca-ES', {hour: '2-digit', minute: '2-digit'}) : '';
+            const startDate = event.start.toLocaleDateString('ca-ES');
+            
+            bodyEl.innerHTML = `
+                <div class="mb-3">
+                    <strong>Tipus:</strong> 
+                    <span class="badge bg-primary">${event.extendedProps.type}</span>
+                </div>
+                <div class="mb-3">
+                    <strong>Professor:</strong> ${event.extendedProps.teacher}
+                </div>
+                <div class="mb-3">
+                    <strong>Data:</strong> ${startDate}
+                </div>
+                <div class="mb-3">
+                    <strong>Horari:</strong> ${startTime} - ${endTime}
+                </div>
+                <div class="mb-3">
+                    <strong>Ubicació:</strong> ${event.extendedProps.location}
+                </div>
+                <div class="mb-3">
+                    <strong>Descripció:</strong>
+                    <p class="text-muted mt-2">${event.extendedProps.description}</p>
+                </div>
+            `;
+            
+            modal.show();
+        }
+        
+        // Abrir modal de nuevo evento con fecha preseleccionada
+        function openNewEventModal(date) {
+            const modal = new bootstrap.Modal(document.getElementById('newEventModal'));
+            document.getElementById('eventDate').value = date.toISOString().split('T')[0];
+            modal.show();
+        }
+        
+        // Crear nuevo evento
+        function createEvent() {
+            const formData = {
+                type: document.getElementById('eventType').value,
+                title: document.getElementById('eventTitle').value,
+                description: document.getElementById('eventDescription').value,
+                date: document.getElementById('eventDate').value,
+                startTime: document.getElementById('eventStartTime').value,
+                endTime: document.getElementById('eventEndTime').value,
+                teacher: document.getElementById('eventTeacher').value,
+                location: document.getElementById('eventLocation').value,
+                capacity: document.getElementById('eventCapacity').value
+            };
+            
+            // Validar datos
+            if (!formData.title || !formData.date || !formData.startTime || !formData.endTime) {
+                alert('Si us plau, completa tots els camps obligatoris');
+                return;
+            }
+            
+            // Crear evento en el calendario
+            const newEvent = {
+                id: Date.now().toString(),
+                title: formData.title,
+                start: `${formData.date}T${formData.startTime}:00`,
+                end: `${formData.date}T${formData.endTime}:00`,
+                className: `event-${formData.type}`,
+                extendedProps: {
+                    type: formData.type,
+                    teacher: getTeacherName(formData.teacher),
+                    location: formData.location,
+                    description: formData.description
+                }
+            };
+            
+            calendar.addEvent(newEvent);
+            
+            // Cerrar modal y limpiar formulario
+            bootstrap.Modal.getInstance(document.getElementById('newEventModal')).hide();
+            document.getElementById('eventForm').reset();
+            
+            // Notificación de éxito
+            showNotification('Event creat correctament!', 'success');
+        }
+        
+        // Cargar horarios disponibles
+        function loadAvailableTimes() {
+            const date = document.getElementById('eventDate').value;
+            const teacherId = document.getElementById('eventTeacher').value;
+            
+            if (!date || !teacherId) {
+                document.getElementById('availableTimesContainer').style.display = 'none';
+                return;
+            }
+            
+            // Simular horarios disponibles
+            const availableTimes = [
+                { time: '09:00', available: true },
+                { time: '10:00', available: false },
+                { time: '11:00', available: true },
+                { time: '12:00', available: true },
+                { time: '14:00', available: false },
+                { time: '15:00', available: true },
+                { time: '16:00', available: true },
+                { time: '17:00', available: false }
+            ];
+            
+            const container = document.getElementById('availableTimes');
+            container.innerHTML = '';
+            
+            availableTimes.forEach(slot => {
+                const timeSlot = document.createElement('div');
+                timeSlot.className = `time-slot ${slot.available ? '' : 'occupied'}`;
+                timeSlot.textContent = slot.time;
+                
+                if (slot.available) {
+                    timeSlot.addEventListener('click', function() {
+                        document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));
+                        this.classList.add('selected');
+                        document.getElementById('eventStartTime').value = slot.time;
+                        
+                        // Calcular hora de fin (1 hora después)
+                        const endTime = new Date(`2000-01-01T${slot.time}:00`);
+                        endTime.setHours(endTime.getHours() + 1);
+                        document.getElementById('eventEndTime').value = endTime.toTimeString().slice(0, 5);
+                    });
+                }
+                
+                container.appendChild(timeSlot);
+            });
+            
+            document.getElementById('availableTimesContainer').style.display = 'block';
+        }
+        
+        // Funciones auxiliares
+        function getTeacherName(teacherId) {
+            const teachers = {
+                '1': 'Prof. Marina García',
+                '2': 'Prof. Joan Ferrer',
+                '3': 'Prof. Laura Martín'
+            };
+            return teachers[teacherId] || 'Professor no especificat';
+        }
+        
+        function showNotification(message, type = 'info') {
+            // Crear notificación toast
+            const toast = document.createElement('div');
+            toast.className = `alert alert-${type} position-fixed`;
+            toast.style.top = '100px';
+            toast.style.right = '2rem';
+            toast.style.zIndex = '1060';
+            toast.textContent = message;
+            
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.remove();
+            }, 3000);
+        }
+        
+        // Actualizar eventos próximos
+        function updateUpcomingEvents() {
+            const now = new Date();
+            const tomorrow = new Date(now);
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            
+            const upcomingEvents = sampleEvents.filter(event => {
+                const eventDate = new Date(event.start);
+                return eventDate >= now && eventDate <= tomorrow;
+            }).sort((a, b) => new Date(a.start) - new Date(b.start));
+            
+            const container = document.getElementById('upcoming-events');
+            container.innerHTML = '';
+            
+            if (upcomingEvents.length === 0) {
+                container.innerHTML = '<p class="text-muted text-center">No hi ha esdeveniments pròxims</p>';
+                return;
+            }
+            
+            upcomingEvents.forEach(event => {
+                const eventEl = document.createElement('div');
+                eventEl.className = 'upcoming-event';
+                eventEl.innerHTML = `
+                    <div class="event-time">${new Date(event.start).toLocaleTimeString('ca-ES', {hour: '2-digit', minute: '2-digit'})}</div>
+                    <div class="event-info">
+                        <div class="event-title">${event.title}</div>
+                        <div class="event-details">${event.extendedProps.teacher} - ${event.extendedProps.location}</div>
+                    </div>
+                `;
+                container.appendChild(eventEl);
+            });
+        }
+        
+        // Actualizar eventos próximos cada minuto
+        setInterval(updateUpcomingEvents, 60000);
+        updateUpcomingEvents();
+    </script>
+</body>
+</html>

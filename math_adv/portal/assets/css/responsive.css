@@ -1,0 +1,425 @@
+/* ===== RESPONSIVE DESIGN GLOBAL PARA TODO EL PORTAL MATH ADVANTAGE ===== */
+
+/* Variables CSS para consistencia - Esquema Lila Math Advantage */
+:root {
+    /* Purple/Violet Theme - Igual que la web principal */
+    --primary-color: #8b5cf6; /* Main purple */
+    --primary-dark: #7c3aed; /* Darker purple */
+    --primary-light: #c4b5fd; /* Light purple */
+    --secondary-color: #6366f1; /* Indigo complement */
+    --accent-color: #ec4899; /* Pink accent */
+    --success-color: #10b981; /* Green */
+    --warning-color: #f59e0b; /* Orange */
+    --dark-color: #1e1b4b; /* Deep navy */
+    --light-bg: #faf5ff; /* Very light purple */
+    --border-color: #e5e7eb;
+    --text-muted: #6b7280;
+    --geometry-gold: #fbbf24;
+    --physics-blue: #3b82f6;
+    
+    /* Responsive breakpoints */
+    --breakpoint-xs: 575.98px;
+    --breakpoint-sm: 767.98px;
+    --breakpoint-md: 991.98px;
+    --breakpoint-lg: 1199.98px;
+    --breakpoint-xl: 1399.98px;
+}
+
+/* Base responsive font-size */
+html {
+    font-size: 16px;
+}
+
+@media (max-width: 575.98px) {
+    html { font-size: 14px; }
+}
+
+@media (min-width: 1200px) {
+    html { font-size: 16px; }
+}
+
+@media (min-width: 1400px) {
+    html { font-size: 17px; }
+}
+
+/* ===== NAVBAR RESPONSIVE GLOBAL ===== */
+.navbar {
+    transition: all 0.3s ease;
+}
+
+/* Logo styling consistent */
+.navbar-brand img {
+    max-height: 40px;
+    width: auto;
+    object-fit: contain;
+}
+
+@media (max-width: 575.98px) {
+    .navbar {
+        padding: 0.5rem 0.5rem;
+        min-height: 60px;
+    }
+    
+    .navbar-brand {
+        font-size: 1rem !important;
+    }
+    
+    .navbar-brand img {
+        height: 30px !important;
+        max-height: 30px !important;
+    }
+    
+    .nav-link {
+        font-size: 0.9rem !important;
+        padding: 0.4rem 0.8rem !important;
+    }
+    
+    .navbar-toggler {
+        padding: 0.3rem 0.5rem;
+        font-size: 0.9rem;
+    }
+    
+    .dropdown-menu {
+        font-size: 0.9rem;
+    }
+}
+
+@media (min-width: 576px) and (max-width: 767.98px) {
+    .navbar {
+        padding: 0.7rem 1rem;
+    }
+}
+
+@media (min-width: 1400px) {
+    .navbar {
+        padding: 1rem 2rem;
+    }
+    
+    .navbar-brand {
+        font-size: 1.3rem !important;
+    }
+}
+
+/* ===== CONTAINERS RESPONSIVE ===== */
+.container-fluid {
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+@media (max-width: 575.98px) {
+    .container-fluid {
+        padding-left: 0.5rem;
+        padding-right: 0.5rem;
+    }
+    
+    .container {
+        padding-left: 0.5rem;
+        padding-right: 0.5rem;
+    }
+}
+
+@media (min-width: 1400px) {
+    .container-fluid {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding-left: 2rem;
+        padding-right: 2rem;
+    }
+}
+
+/* ===== CARDS Y COMPONENTES ===== */
+.dashboard-card,
+.card,
+.section-card {
+    transition: all 0.3s ease;
+}
+
+@media (max-width: 575.98px) {
+    .dashboard-card,
+    .card,
+    .section-card {
+        border-radius: 8px !important;
+        margin-bottom: 1rem;
+    }
+    
+    .card-body {
+        padding: 1rem !important;
+    }
+    
+    .card-header {
+        padding: 0.8rem 1rem !important;
+    }
+}
+
+@media (min-width: 1200px) {
+    .dashboard-card,
+    .card,
+    .section-card {
+        border-radius: 16px !important;
+    }
+    
+    .card-body {
+        padding: 2rem !important;
+    }
+}
+
+/* ===== BOTONES RESPONSIVE ===== */
+.btn {
+    transition: all 0.3s ease;
+}
+
+@media (max-width: 575.98px) {
+    .btn {
+        font-size: 16px !important; /* Prevenir zoom iOS */
+        padding: 0.6rem 1rem !important;
+    }
+    
+    .btn-sm {
+        padding: 0.4rem 0.8rem !important;
+        font-size: 14px !important;
+    }
+    
+    .btn-lg {
+        padding: 0.8rem 1.5rem !important;
+        font-size: 16px !important;
+    }
+}
+
+/* ===== FORMULARIOS RESPONSIVE ===== */
+@media (max-width: 575.98px) {
+    .form-control,
+    .form-select,
+    textarea {
+        font-size: 16px !important; /* Prevenir zoom iOS */
+        padding: 0.6rem 0.8rem !important;
+    }
+    
+    .form-floating input,
+    .form-floating textarea {
+        font-size: 16px !important;
+    }
+    
+    .form-floating label {
+        font-size: 0.9rem;
+    }
+    
+    .input-group {
+        flex-wrap: wrap;
+    }
+    
+    .input-group .btn {
+        margin-top: 0.5rem;
+        width: 100%;
+    }
+}
+
+/* ===== TABLAS RESPONSIVE ===== */
+@media (max-width: 767.98px) {
+    .table-responsive {
+        font-size: 0.85rem;
+        border-radius: 8px;
+    }
+    
+    .table th,
+    .table td {
+        padding: 0.5rem 0.3rem !important;
+        vertical-align: middle;
+    }
+    
+    .table th {
+        font-size: 0.8rem;
+        white-space: nowrap;
+    }
+    
+    .badge {
+        font-size: 0.7rem !important;
+        padding: 0.3rem 0.5rem !important;
+    }
+}
+
+/* ===== MODALES RESPONSIVE ===== */
+@media (max-width: 575.98px) {
+    .modal-dialog {
+        margin: 0.5rem !important;
+        max-width: calc(100% - 1rem) !important;
+    }
+    
+    .modal-content {
+        border-radius: 12px !important;
+    }
+    
+    .modal-header,
+    .modal-footer {
+        padding: 1rem !important;
+    }
+    
+    .modal-body {
+        padding: 1rem !important;
+    }
+    
+    .modal-title {
+        font-size: 1.1rem !important;
+    }
+}
+
+/* ===== ALERTS RESPONSIVE ===== */
+@media (max-width: 575.98px) {
+    .alert {
+        padding: 0.8rem !important;
+        font-size: 0.9rem;
+        border-radius: 8px !important;
+    }
+    
+    .alert .btn-close {
+        padding: 0.5rem !important;
+    }
+}
+
+/* ===== NAVEGACIÓN TABS RESPONSIVE ===== */
+@media (max-width: 767.98px) {
+    .nav-pills,
+    .nav-tabs {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+    }
+    
+    .nav-pills::-webkit-scrollbar,
+    .nav-tabs::-webkit-scrollbar {
+        display: none;
+    }
+    
+    .nav-pills .nav-link,
+    .nav-tabs .nav-link {
+        flex-shrink: 0;
+        white-space: nowrap;
+        font-size: 0.9rem;
+        padding: 0.5rem 1rem;
+    }
+}
+
+/* ===== GRIDS RESPONSIVE ===== */
+.dashboard-stats {
+    display: grid;
+    gap: 1.5rem;
+}
+
+@media (max-width: 575.98px) {
+    .dashboard-stats {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+}
+
+@media (min-width: 576px) and (max-width: 767.98px) {
+    .dashboard-stats {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 991.98px) {
+    .dashboard-stats {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (min-width: 992px) {
+    .dashboard-stats {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+/* ===== LANDSCAPE MOBILE OPTIMIZATIONS ===== */
+@media (max-width: 767px) and (orientation: landscape) {
+    .navbar {
+        padding: 0.3rem 1rem !important;
+        min-height: 50px;
+    }
+    
+    .main-container,
+    .container.mt-4 {
+        margin-top: 0.5rem !important;
+        padding-top: 60px;
+    }
+    
+    .dashboard-card {
+        padding: 0.8rem !important;
+    }
+    
+    .modal-dialog {
+        margin: 0.2rem !important;
+    }
+}
+
+/* ===== HIGH DPI DISPLAYS ===== */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 2dppx) {
+    .card,
+    .dashboard-card {
+        box-shadow: 0 4px 25px rgba(0, 0, 0, 0.15) !important;
+    }
+    
+    .btn {
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1) !important;
+    }
+}
+
+/* ===== PRINT STYLES ===== */
+@media print {
+    .navbar,
+    .btn,
+    .dropdown,
+    .alert-dismissible .btn-close {
+        display: none !important;
+    }
+    
+    .container-fluid,
+    .container {
+        max-width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+    
+    .card,
+    .dashboard-card {
+        border: 1px solid #dee2e6 !important;
+        box-shadow: none !important;
+        break-inside: avoid;
+    }
+}
+
+/* ===== ACCESSIBILITY IMPROVEMENTS ===== */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* ===== DARK MODE SUPPORT ===== */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --light-bg: #1f2937;
+        --border-color: #374151;
+        --text-muted: #9ca3af;
+    }
+}
+
+/* ===== UTILITIES RESPONSIVE ===== */
+@media (max-width: 575.98px) {
+    .d-sm-none { display: none !important; }
+    .d-sm-block { display: block !important; }
+    .text-sm-center { text-align: center !important; }
+    .mb-sm-2 { margin-bottom: 0.5rem !important; }
+    .p-sm-2 { padding: 0.5rem !important; }
+}
+
+@media (max-width: 767.98px) {
+    .d-md-none { display: none !important; }
+    .d-md-block { display: block !important; }
+    .flex-md-column { flex-direction: column !important; }
+}
